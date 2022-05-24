@@ -8,7 +8,8 @@ import MusicScreen from "./screens/Music/MusicScreen";
 
 const Tab = createMaterialBottomTabNavigator();
 
-export default function Navigation() {
+export default function Navigation()
+{
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -34,11 +35,7 @@ export default function Navigation() {
           options={{
             tabBarLabel: "Player",
             tabBarIcon: ({ color }) => (
-              <MaterialCommunityIcons
-                name="motion-play"
-                color={color}
-                size={26}
-              />
+              <MaterialCommunityIcons name="motion-play" color={color} size={26} />
             ),
           }}
         />

@@ -22,15 +22,16 @@ export default class SongContext extends BaseModel
     {
         return {
             id: { type: types.INTEGER, primary_key: true },
-            addr: { type: types.INTEGER },
-            lat: { type: types.FLOAT },
-            lng: { type: types.FLOAT },
-            desc: { type: types.TEXT },
-            zip: { type: types.TEXT },
+            avatar: { type: types.TEXT },
+            bgImage: { type: types.TEXT },
+            coverImage: { type: types.TEXT },
+            creator: { type: types.TEXT },
+            lyric: { type: types.TEXT },
+            music: { type: types.TEXT },
             title: { type: types.TEXT },
-            timeStamp: { type: types.TEXT },
-            twp: { type: types.TEXT },
-            e: { type: types.TEXT },
+            url: { type: types.TEXT },
+            top: { type: types.TEXT },
+            category: { type: types.TEXT }
         }
     }
 }
