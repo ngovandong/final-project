@@ -1,13 +1,26 @@
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { Provider } from 'react-redux';
+import Navigation from './Navigation';
 import { store } from './redux/store';
 import React from 'react';
-import Navigation from './Navigation';
+
+const theme = {
+  ...DefaultTheme,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#2ea9ed',
+    accent: '#fad543',
+  },
+};
 
 export default function App()
 {
   return (
     <Provider store={store}>
-      <Navigation />
+      <PaperProvider theme={theme}>
+        <Navigation />
+      </PaperProvider>
     </Provider>
   );
 }
