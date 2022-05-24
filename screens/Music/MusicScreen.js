@@ -1,14 +1,19 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
+
+import TopCategory from "./TopCategory";
+import SongList from "./SongList";
+
+const Stack = createNativeStackNavigator();
 
 export default function MusicScreen()
 {
   return (
-    <View style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <Text style={{ marginTop: 100, alignSelf: "center" }}>Music</Text>
-      </View>
-    </View>
+    <Stack.Navigator initialRouteName="TopCategory">
+      <Stack.Screen name="TopCategory" component={TopCategory} options={{ headerShown: false }} />
+      <Stack.Screen name="SongList" component={SongList} options={{ headerShown: false }} />
+    </Stack.Navigator>
   );
 }
 
