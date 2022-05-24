@@ -6,8 +6,8 @@ export default function CustomHeader({ navigation, back })
 {
     return (
         <Appbar.Header>
-            {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
-            <Appbar.Content title="Top 100" />
+            {back ? <Appbar.BackAction color='white' onPress={navigation.goBack} /> : null}
+            <Appbar.Content color='white' title="Top 100" />
         </Appbar.Header>
     );
 }
