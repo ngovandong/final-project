@@ -8,7 +8,12 @@ export default function TopCategory({ navigation })
     return (
         <View>
             <Text>Top Category</Text>
-            <Button mode="outlined" onPress={() => navigation.navigate("SongList")}>ahihi</Button>
+            <View style={{ width: "50%", alignItems: "center" }}>
+                <Button mode="contained"
+                    onPress={() => navigation.navigate("SongList")}>
+                    <Text style={{ color: "white" }}>AHIHI</Text>
+                </Button>
+            </View>
         </View>
     );
 }

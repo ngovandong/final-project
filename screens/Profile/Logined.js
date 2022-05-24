@@ -1,14 +1,16 @@
 import { View, Text } from "react-native";
 import { Button } from "react-native-paper";
-import { useFirbase } from "../../hooks/useFirebase";
+import { useFirebase } from "../../hooks/useFirebase";
 
-function Logined() {
-  const { logout } = useFirbase();
+function Logined()
+{
+  const { logout } = useFirebase();
   return (
     <View>
       <Text>Logined</Text>
       <Button
-        onPress={() => {
+        onPress={() =>
+        {
           logout();
         }}
       >

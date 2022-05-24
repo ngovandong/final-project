@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/core";
 import React, { useEffect, useState } from "react";
-import {
+import
+{
   KeyboardAvoidingView,
   StyleSheet,
   Text,
@@ -9,15 +10,16 @@ import {
   View,
 } from "react-native";
 import { auth } from "../../hooks/firebase";
-import { useFirbase } from "../../hooks/useFirebase";
+import { useFirebase } from "../../hooks/useFirebase";
 
-const LoginScreen = () => {
+const LoginScreen = () =>
+{
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   //   const navigation = useNavigation()
 
-  const { signup, login } = useFirbase();
+  const { signup, login } = useFirebase();
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.inputContainer}>
@@ -38,7 +40,8 @@ const LoginScreen = () => {
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          onPress={() => {
+          onPress={() =>
+          {
             login(email, password);
           }}
           style={styles.button}
@@ -46,7 +49,8 @@ const LoginScreen = () => {
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => {
+          onPress={() =>
+          {
             signup(email, password);
           }}
           style={[styles.button, styles.buttonOutline]}
