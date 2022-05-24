@@ -1,7 +1,6 @@
 import { SET_MUSIC_DATA } from "../redux/slices/musicSlice"
 import { useDispatch } from 'react-redux';
 
-
 export default function useMusicAPI()
 {
     const dispatch = useDispatch();
