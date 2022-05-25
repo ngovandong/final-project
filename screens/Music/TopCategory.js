@@ -24,13 +24,17 @@ export default function TopCategory({ navigation })
                 <List.AccordionGroup>
                     {
                         top_category.map((tc, idx) =>
-                            <List.Accordion key={idx} id={idx + 1} title={formatTop(tc.top)}
+                            <List.Accordion
+                                key={idx} id={idx + 1}
+                                title={formatTop(tc.top)}
                                 left={props => <List.Icon {...props} icon="music" />}
                             >
                                 {
                                     tc.category.map((ctg, idxx) => (
-                                        <List.Item title={ctg} key={idxx}
-                                            onPress={() => handleSelectCategory(tc.top, ctg)} />
+                                        <List.Item
+                                            title={ctg} key={idxx}
+                                            onPress={() => handleSelectCategory(tc.top, ctg)}
+                                        />
                                     ))
                                 }
                             </List.Accordion>
