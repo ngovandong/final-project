@@ -1,5 +1,6 @@
 import { formatTop } from "../../helpers/extension";
 import { StyleSheet, View } from "react-native";
+import useMusic from "../../hooks/useMusic";
 import { useSelector } from "react-redux";
 import { List } from "react-native-paper";
 import React from "react";
@@ -8,6 +9,13 @@ import React from "react";
 export default function TopCategory({ navigation })
 {
     const { top_category } = useSelector(state => state.music);
+    const { Filter_Song_Top_Category } = useMusic();
+
+    const handleSelectCategory = async (top, category) =>
+    {
+        await Filter_Song_Top_Category(top, category);
+        navigation.navigate("SongList");
+    };
 
     return (
         <View style={styles.container}>
@@ -22,7 +30,7 @@ export default function TopCategory({ navigation })
                                 {
                                     tc.category.map((ctg, idxx) => (
                                         <List.Item title={ctg} key={idxx}
-                                            onPress={() => console.log(ctg)} />
+                                            onPress={() => handleSelectCategory(tc.top, ctg)} />
                                     ))
                                 }
                             </List.Accordion>
