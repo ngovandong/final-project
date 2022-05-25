@@ -19,6 +19,12 @@ export default function MusicScreen()
   //   drop_table();
   // }, []);
 
+  // useEffect(() =>
+  // {
+  //   const delete_all = async () => Delete_All();
+  //   delete_all();
+  // }, []);
+
   useEffect(() =>
   {
     const create_table = async () => Create_Table();
@@ -30,12 +36,6 @@ export default function MusicScreen()
     const get_db = async () => Get_Music_DB();
     get_db();
   }, []);
-
-  // useEffect(() =>
-  // {
-  //   const delete_all = async () => Delete_All();
-  //   delete_all();
-  // }, []);
 
   return (
     <Stack.Navigator initialRouteName="TopCategory" screenOptions={{ header: CustomHeader }}>

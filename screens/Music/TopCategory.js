@@ -18,7 +18,7 @@ export default function TopCategory({ navigation })
                     <Text style={{ color: "white" }}>AHIHI</Text>
                 </Button>
                 {
-                    top_category.map(tc => <Text>{formatTop(tc.top)}</Text>)
+                    top_category.map((tc, idx) => <Text key={idx}>{formatTop(tc.top)}</Text>)
                 }
             </View>
         </View>

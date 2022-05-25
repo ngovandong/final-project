@@ -28,19 +28,30 @@ export default function useMusic()
         const top_category = tc.data;
         Object.getOwnPropertyNames(top_category).forEach(top =>
         {
+            // Thêm vào DB
             TopCategoryContext.create({
                 top: top,
                 category: JSON.stringify(top_category[top])
             });
-            // top_category[top].forEach(category =>
-            // {
-
-            // });
-            // const {data:songs}=await FILTER_BY_TOP_CATEGORY({
-            //     top:top,
-            //     category:
-            // });
-        })
+            // Lấy danh sách bài hát của từng Top và Category
+            top_category[top].forEach(async (category) =>
+            {
+                const { data: songs } = await FILTER_BY_TOP_CATEGORY({
+                    top: top,
+                    category: category
+                });
+                // Lưu bài hát vào Database, kèm thêm top và category tương ứng
+                songs.data.forEach(s =>
+                {
+                    SongContext.create({
+                        ...s,
+                        top: top,
+                        category: category
+                    });
+                });
+            });
+        });
+        console.log(">> Save music to database");
     };
 
     const Get_Music_DB = async () =>
@@ -49,16 +60,16 @@ export default function useMusic()
         // Nếu chưa có thì tự động gọi API để lấy và lưu vào DB
         let TopCategoryDB = await TopCategoryContext.query();
         if (TopCategoryDB.length == 0) await Get_Music_API();
-        // Lấy dữ liệu từ DB
-        TopCategoryDB = await TopCategoryContext.query();
 
+        // Lấy dữ liệu TopCategory từ DB
+        TopCategoryDB = await TopCategoryContext.query();
         // Dispatch vào Redux Store
         TopCategoryDB = TopCategoryDB.map(tc => (
             {
                 top: tc.top,
                 category: JSON.parse(tc.category)
             }));
-        await dispatch(SET_TOP_CATEGORY(TopCategoryDB));
+        dispatch(SET_TOP_CATEGORY(TopCategoryDB));
     };
 
     const Delete_TopCategory = async (id) =>
