@@ -30,6 +30,6 @@ export const musicSlice = createSlice({
     extraReducers: {}
 });
 
-export const { SET_MUSIC_DATA } = musicSlice.actions;
+export const { SET_TOP_CATEGORY, SET_SONGS, SET_MUSIC_DATA } = musicSlice.actions;
 
 export default musicSlice.reducer;

@@ -1,6 +1,6 @@
+import { SET_TOP_CATEGORY, SET_SONGS, SET_MUSIC_DATA } from "../redux/slices/musicSlice"
 import { GET_TOP_CATEGORY, FILTER_BY_TOP_CATEGORY } from "../api/apiMusic";
 import TopCategoryContext from "../models/TopCategoryContext";
-import { SET_MUSIC_DATA } from "../redux/slices/musicSlice"
 import SongContext from "../models/SongContext";
 import { useDispatch } from 'react-redux';
 
@@ -24,15 +24,41 @@ export default function useMusic()
 
     const Get_Music_API = async () =>
     {
+        const { data: tc } = await GET_TOP_CATEGORY();
+        const top_category = tc.data;
+        Object.getOwnPropertyNames(top_category).forEach(top =>
+        {
+            TopCategoryContext.create({
+                top: top,
+                category: JSON.stringify(top_category[top])
+            });
+            // top_category[top].forEach(category =>
+            // {
 
+            // });
+            // const {data:songs}=await FILTER_BY_TOP_CATEGORY({
+            //     top:top,
+            //     category:
+            // });
+        })
     };
 
-    const Get_TopCategory_DB = async () =>
+    const Get_Music_DB = async () =>
     {
-        // const TopCategoryDB = await TopCategoryContext.query();
-        // if (TopCategoryDB.length == 0)
-        //     await Get_Station_From_API();
-        // else dispatch(SET_LIST_STATION(TopCategoryDB));
+        // Kiểm tra xem Database đã có dữ liệu hay chưa
+        // Nếu chưa có thì tự động gọi API để lấy và lưu vào DB
+        let TopCategoryDB = await TopCategoryContext.query();
+        if (TopCategoryDB.length == 0) await Get_Music_API();
+        // Lấy dữ liệu từ DB
+        TopCategoryDB = await TopCategoryContext.query();
+
+        // Dispatch vào Redux Store
+        TopCategoryDB = TopCategoryDB.map(tc => (
+            {
+                top: tc.top,
+                category: JSON.parse(tc.category)
+            }));
+        await dispatch(SET_TOP_CATEGORY(TopCategoryDB));
     };
 
     const Delete_TopCategory = async (id) =>
@@ -52,31 +78,8 @@ export default function useMusic()
         console.log(">> Cleared music table");
     };
 
-    // const Load_Quizz_API = async () =>
-    // {
-    //     try
-    //     {
-    //         const { data } = await GET_QUIZZ();
-    //         dispatch(SET_QUIZZ({
-    //             listQuizz: data,
-    //             isLoading: false,
-    //             exception: "",
-    //             currentQuizz: data[0]
-    //         }));
-    //     }
-    //     catch
-    //     {
-    //         console.log("Error occur when load api");
-    //         dispatch(SET_QUIZZ({
-    //             listQuizz: [],
-    //             isLoading: true,
-    //             exception: "Error occur when load api",
-    //             currentQuizz: null
-    //         }));
-    //     }
-    // };
-
     return {
-
+        Create_Table, Drop_Table, Get_Music_API, Get_Music_DB,
+        Delete_TopCategory, Delete_Song, Delete_All
     };
 }
