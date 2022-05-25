@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
 import { formatTop } from "../../helpers/extension";
-import { Button } from "react-native-paper";
+import { StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
-import React, { useState } from "react";
+import { List } from "react-native-paper";
+import React from "react";
 
 
 export default function TopCategory({ navigation })
@@ -10,19 +10,32 @@ export default function TopCategory({ navigation })
     const { top_category } = useSelector(state => state.music);
 
     return (
-        <View>
-            <Text>Top Category</Text>
-            <View style={{ width: "50%", alignItems: "center" }}>
-                <Button mode="contained"
-                    onPress={() => navigation.navigate("SongList")}>
-                    <Text style={{ color: "white" }}>AHIHI</Text>
-                </Button>
-                {
-                    top_category.map((tc, idx) => <Text key={idx}>{formatTop(tc.top)}</Text>)
-                }
-            </View>
+        <View style={styles.container}>
+            {
+                top_category.length > 0 &&
+                <List.AccordionGroup>
+                    {
+                        top_category.map((tc, idx) =>
+                            <List.Accordion key={idx} id={idx + 1} title={formatTop(tc.top)}
+                                left={props => <List.Icon {...props} icon="music" />}
+                            >
+                                {
+                                    tc.category.map((ctg, idxx) => (
+                                        <List.Item title={ctg} key={idxx}
+                                            onPress={() => console.log(ctg)} />
+                                    ))
+                                }
+                            </List.Accordion>
+                        )
+                    }
+                </List.AccordionGroup>
+            }
         </View>
     );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    }
+});
