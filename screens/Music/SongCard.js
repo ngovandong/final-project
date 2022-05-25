@@ -4,7 +4,7 @@ import React from "react";
 export default function SongCard({ song })
 {
     return (
-        <TouchableOpacity style={styles.songCard}>
+        <TouchableOpacity style={styles.songCard} activeOpacity={0.5}>
             <View style={styles.imgBox}>
                 <Image style={styles.avatarIMG} source={{ uri: song.avatar }} />
             </View>
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         flexDirection: "row",
         borderColor: "#dedede",
-        margin: 10,
+        margin: 5,
         marginLeft: 15,
         marginRight: 15,
         padding: 10,
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     },
 
     imgBox: {
-
+        flex: 1
     },
     avatarIMG: {
         width: 70,
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     },
 
     inforBox: {
+        flex: 4,
         marginLeft: 15,
         alignSelf: "center"
     },
