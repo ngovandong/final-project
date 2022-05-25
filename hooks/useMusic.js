@@ -72,6 +72,19 @@ export default function useMusic()
         dispatch(SET_TOP_CATEGORY(TopCategoryDB));
     };
 
+
+    const Filter_Song_Top_Category = async (top, category) =>
+    {
+        const filter_songs = await SongContext.filterByTopCategory(top, category);
+        dispatch(SET_SONGS(filter_songs));
+    };
+
+    const Search_Song_Title = async (title) =>
+    {
+        const search_songs = await SongContext.searchByTitle(title);
+        dispatch(SET_SONGS(search_songs));
+    };
+
     const Delete_TopCategory = async (id) =>
     {
         await TopCategoryContext.destroy(id);
@@ -91,6 +104,7 @@ export default function useMusic()
 
     return {
         Create_Table, Drop_Table, Get_Music_API, Get_Music_DB,
+        Filter_Song_Top_Category, Search_Song_Title,
         Delete_TopCategory, Delete_Song, Delete_All
     };
 }

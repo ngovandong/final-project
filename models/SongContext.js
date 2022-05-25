@@ -18,6 +18,20 @@ export default class SongContext extends BaseModel
         return "song";
     }
 
+    static filterByTopCategory(top, category)
+    {
+        const sql = `SELECT * FROM song WHERE top = ? AND category = ?`;
+        const params = [top, category];
+        return this.repository.databaseLayer.executeSql(sql, params).then(({ rows }) => rows);
+    }
+
+    static searchByTitle(title)
+    {
+        const sql = `SELECT * FROM song WHERE title LIKE '%${title}%'`;
+        const params = [];
+        return this.repository.databaseLayer.executeSql(sql, params).then(({ rows }) => rows);
+    }
+
     static get columnMapping()
     {
         return {
