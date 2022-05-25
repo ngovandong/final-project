@@ -1,10 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import { formatTop } from "../../helpers/extension";
 import { Button } from "react-native-paper";
+import { useSelector } from "react-redux";
+import React, { useState } from "react";
 
 
 export default function TopCategory({ navigation })
 {
+    const { top_category } = useSelector(state => state.music);
+
     return (
         <View>
             <Text>Top Category</Text>
@@ -13,6 +17,9 @@ export default function TopCategory({ navigation })
                     onPress={() => navigation.navigate("SongList")}>
                     <Text style={{ color: "white" }}>AHIHI</Text>
                 </Button>
+                {
+                    top_category.map((tc, idx) => <Text key={idx}>{formatTop(tc.top)}</Text>)
+                }
             </View>
         </View>
     );
