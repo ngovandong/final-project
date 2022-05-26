@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 
 import CustomHeader from './CustomHeader';
 import TopCategory from "./TopCategory";
+import SearchSong from "./SearchSong";
 import SongList from "./SongList";
 
 const Stack = createNativeStackNavigator();
@@ -41,6 +42,7 @@ export default function MusicScreen()
     <Stack.Navigator initialRouteName="TopCategory" screenOptions={{ header: CustomHeader }}>
       <Stack.Screen name="TopCategory" component={TopCategory} />
       <Stack.Screen name="SongList" component={SongList} />
+      <Stack.Screen name="SearchSong" component={SearchSong} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
