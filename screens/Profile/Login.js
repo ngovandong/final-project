@@ -1,25 +1,20 @@
-import { useNavigation } from "@react-navigation/core";
-import React, { useEffect, useState } from "react";
-import
-{
+import React, { useState } from "react";
+import {
   KeyboardAvoidingView,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from "react-native";
-import { auth } from "../../hooks/firebase";
+import { Button, useTheme } from "react-native-paper";
 import { useFirebase } from "../../hooks/useFirebase";
 
-const LoginScreen = () =>
-{
+const Login = ({ navigation }) => {
+  const { colors } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  //   const navigation = useNavigation()
-
-  const { signup, login } = useFirebase();
+  const { login } = useFirebase();
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.inputContainer}>
@@ -39,32 +34,32 @@ const LoginScreen = () =>
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          onPress={() =>
-          {
+        <Button
+          mode="contained"
+          style={{ width: 200, borderRadius: 5, marginBottom: 10 }}
+          onPress={() => {
             login(email, password);
           }}
-          style={styles.button}
         >
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() =>
-          {
-            signup(email, password);
+          <Text style={{ color: "white" }}>Login</Text>
+        </Button>
+        <Button
+          mode="outlined"
+          style={{ color: colors.primary, width: 200, borderRadius: 5 }}
+          onPress={() => {
+            navigation.navigate("Signup");
           }}
-          style={[styles.button, styles.buttonOutline]}
         >
-          <Text style={styles.buttonOutlineText}>Register</Text>
-        </TouchableOpacity>
+          <Text style={{ color: colors.primary }}>Signup</Text>
+        </Button>
       </View>
     </KeyboardAvoidingView>
   );
 };
 
-export default LoginScreen;
+export default Login;
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
@@ -85,28 +80,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 40,
-  },
-  button: {
-    backgroundColor: "#0782F9",
-    width: "100%",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  buttonOutline: {
-    backgroundColor: "white",
-    marginTop: 5,
-    borderColor: "#0782F9",
-    borderWidth: 2,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  buttonOutlineText: {
-    color: "#0782F9",
-    fontWeight: "700",
-    fontSize: 16,
   },
 });

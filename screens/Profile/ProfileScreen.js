@@ -1,17 +1,23 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
-import LoginScreen from "./LoginScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { StyleSheet, View } from "react-native";
+import React, { useEffect } from "react";
+
+import Login from "./Login";
 import { useFirebase } from "../../hooks/useFirebase";
 import Logined from "./Logined";
+import Signup from "./Signup";
 
-export default function ProfileScreen()
-{
+const Stack = createNativeStackNavigator();
+
+export default function ProfileScreen() {
   const { isLogined } = useFirebase();
-  return (
-    <View style={{ flex: 1 }}>
-      {isLogined && <Logined />}
-      {!isLogined && <LoginScreen />}
-    </View>
+  return isLogined ? (
+    <Logined />
+  ) : (
+    <Stack.Navigator initialRouteName="Login">
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Signup" component={Signup} />
+    </Stack.Navigator>
   );
 }
 
