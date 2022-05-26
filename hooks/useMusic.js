@@ -1,5 +1,5 @@
-import { SET_TOP_CATEGORY, SET_SONGS, SET_MUSIC_DATA } from "../redux/slices/musicSlice"
 import { GET_TOP_CATEGORY, FILTER_BY_TOP_CATEGORY } from "../api/apiMusic";
+import { SET_TOP_CATEGORY, SET_SONGS } from "../redux/slices/musicSlice"
 import TopCategoryContext from "../models/TopCategoryContext";
 import SongContext from "../models/SongContext";
 import { useDispatch } from 'react-redux';
@@ -58,20 +58,38 @@ export default function useMusic()
 
     const Get_Music_DB = async () =>
     {
-        // Kiểm tra xem Database đã có dữ liệu hay chưa
-        // Nếu chưa có thì tự động gọi API để lấy và lưu vào DB
-        let TopCategoryDB = await TopCategoryContext.query();
-        if (TopCategoryDB.length == 0) await Get_Music_API();
-
-        // Lấy dữ liệu TopCategory từ DB
-        TopCategoryDB = await TopCategoryContext.query();
-        // Dispatch vào Redux Store
-        TopCategoryDB = TopCategoryDB.map(tc => (
+        try
+        {
+            // Lấy dữ liệu TopCategory từ DB
+            let TopCategoryDB = await TopCategoryContext.query();
+            // Nếu database chưa có thì tự động gọi API để lấy và lưu vào DB
+            if (TopCategoryDB.length == 0)
             {
-                top: tc.top,
-                category: JSON.parse(tc.category)
+                await Get_Music_API();
+                // Lấy dữ liệu TopCategory từ DB
+                TopCategoryDB = await TopCategoryContext.query();
+            }
+            // JSON parse cho mảng Category
+            TopCategoryDB = TopCategoryDB.map(tc => (
+                {
+                    top: tc.top,
+                    category: JSON.parse(tc.category)
+                }));
+            // Dispatch vào Redux Store
+            dispatch(SET_TOP_CATEGORY({
+                top_category: TopCategoryDB,
+                isLoading: false,
+                exception: ""
             }));
-        dispatch(SET_TOP_CATEGORY(TopCategoryDB));
+        }
+        catch
+        {
+            dispatch(SET_TOP_CATEGORY({
+                top_category: [],
+                isLoading: true,
+                exception: "Error !"
+            }));
+        }
     };
 
 
@@ -112,9 +130,24 @@ export default function useMusic()
         console.log(">> Cleared music table");
     };
 
+    const Reload_Music = async () =>
+    {
+        // Clear mọi thứ
+        await dispatch(SET_TOP_CATEGORY({
+            top_category: [],
+            isLoading: true,
+            exception: ""
+        }));
+        await Clear_Song_Store();
+        // Xóa hết dữ liệu trong Database
+        await Delete_All();
+        // Cập nhật lại Database bằng API
+        await Get_Music_DB();
+    };
+
     return {
         Create_Table, Drop_Table, Get_Music_API, Get_Music_DB,
         Filter_Song_Top_Category, Search_Song_Title, Clear_Song_Store,
-        Delete_TopCategory, Delete_Song, Delete_All
+        Delete_TopCategory, Delete_Song, Delete_All, Reload_Music
     };
 }
