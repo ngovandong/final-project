@@ -1,14 +1,28 @@
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Appbar, Searchbar } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
+import useMusic from "../../hooks/useMusic";
 import SongList from "./SongList";
 import React from "react";
 
 export default function SearchSong({ navigation })
 {
-    const handleSearch = () =>
-    {
+    const { Search_Song_Title, Clear_Song_Store } = useMusic();
 
+    const handleSearch = (query) =>
+    {
+        // Nếu không có thông tin thì song state không chứa gì cả
+        if (query.length == 0)
+            Clear_Song_Store();
+        else
+            Search_Song_Title(query);
+    };
+
+    const handleGoBack = () =>
+    {
+        // Clear song ở Redux Store trước khi go back
+        Clear_Song_Store();
+        navigation.goBack();
     };
 
     return (
@@ -21,7 +35,7 @@ export default function SearchSong({ navigation })
                 />
 
                 <Appbar.Action
-                    onPress={navigation.goBack} color="white"
+                    onPress={handleGoBack} color="white"
                     icon={({ color }) => <MaterialIcons name="search" color={color} size={26} />}
                 />
             </Appbar.Header>

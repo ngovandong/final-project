@@ -24,11 +24,13 @@ export default function useMusic()
 
     const Get_Music_API = async () =>
     {
+        // Gọi API để lấy về Top và Category
         const { data: tc } = await GET_TOP_CATEGORY();
         const top_category = tc.data;
+        // Duyệt qua các Key của Object - các Top 100 : top100_VN, top100_AM, ...
         Object.getOwnPropertyNames(top_category).forEach(top =>
         {
-            // Thêm vào DB
+            // Thêm vào DB, chuyển mảng các category thành JSON
             TopCategoryContext.create({
                 top: top,
                 category: JSON.stringify(top_category[top])
@@ -75,14 +77,22 @@ export default function useMusic()
 
     const Filter_Song_Top_Category = async (top, category) =>
     {
+        // Lọc ra các bài hát theo top và category
         const filter_songs = await SongContext.filterByTopCategory(top, category);
         dispatch(SET_SONGS(filter_songs));
     };
 
     const Search_Song_Title = async (title) =>
     {
+        // Tìm kiếm tương đối tên bài hát theo tiêu đề
         const search_songs = await SongContext.searchByTitle(title);
         dispatch(SET_SONGS(search_songs));
+    };
+
+    const Clear_Song_Store = () =>
+    {
+        // Xóa hết nhạc lưu trong Redux Store
+        dispatch(SET_SONGS([]));
     };
 
     const Delete_TopCategory = async (id) =>
@@ -104,7 +114,7 @@ export default function useMusic()
 
     return {
         Create_Table, Drop_Table, Get_Music_API, Get_Music_DB,
-        Filter_Song_Top_Category, Search_Song_Title,
+        Filter_Song_Top_Category, Search_Song_Title, Clear_Song_Store,
         Delete_TopCategory, Delete_Song, Delete_All
     };
 }
