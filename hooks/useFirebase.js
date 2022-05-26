@@ -1,69 +1,55 @@
 import React, { useContext, useState, useEffect } from "react";
 import { auth } from "./firebase";
-import
-  {
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-    sendPasswordResetEmail,
-    updatePassword,
-    GoogleAuthProvider,
-    signInWithPopup,
-  } from "firebase/auth";
-import
-  {
-    getFirestore,
-    collection,
-    addDoc,
-    query,
-    where,
-    getDocs,
-  } from "firebase/firestore";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  sendPasswordResetEmail,
+  updatePassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 
 const FirebaseContext = React.createContext();
 
-export function useFirebase()
-{
+export function useFirebase() {
   return useContext(FirebaseContext);
 }
 
-export function FirebaseProvider({ children })
-{
+export function FirebaseProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
   const db = getFirestore();
-  async function signup(email, password)
-  {
-    const result = await createUserWithEmailAndPassword(auth, email, password);
-  }
-  async function login(email, password)
-  {
-    await signInWithEmailAndPassword(auth, email, password);
-  }
-  function updateProfile(password)
-  {
-    return updatePassword(currentUser, password);
-  }
-  function resetPassword(email)
-  {
-    return sendPasswordResetEmail(auth, email);
-  }
-  function logout()
-  {
-    console.log(currentUser);
-    return signOut(auth);
-  }
-  function getPhoto()
-  {
-    if (currentUser.photoURL)
-    {
-      return currentUser.photoURL;
+  async function signup(email, password) {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.log(error);
     }
   }
-  function isLogined()
-  {
-    return currentUser;
+  async function login(email, password) {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.log(error);
+    }
   }
+  function logout() {
+    try {
+      return signOut(auth);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const isLogined = currentUser != null;
 
   const value = {
     db,
@@ -71,15 +57,11 @@ export function FirebaseProvider({ children })
     login,
     signup,
     logout,
-    resetPassword,
-    updateProfile,
     isLogined,
   };
 
-  useEffect(() =>
-  {
-    const unsubcribe = auth.onAuthStateChanged((user) =>
-    {
+  useEffect(() => {
+    const unsubcribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
       setLoading(currentUser);
     });
