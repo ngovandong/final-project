@@ -1,16 +1,30 @@
 import { StyleSheet, View, FlatList } from "react-native";
+import { Appbar } from 'react-native-paper';
+import useMusic from "../../hooks/useMusic";
 import { useSelector } from "react-redux";
 import SongCard from "./SongCard";
 import React from "react";
 
-export default function SongList()
+export default function SongList({ navigation })
 {
     const { songs } = useSelector(state => state.music);
+    const { Clear_Song_Store } = useMusic();
 
     const renderSong = ({ item }) => <SongCard song={item} />;
 
+    const handleGoBack = () =>
+    {
+        // Clear song ở Redux Store trước khi go back
+        Clear_Song_Store();
+        navigation.goBack();
+    };
+
     return (
         <View>
+            <Appbar.Header>
+                <Appbar.BackAction color='white' onPress={handleGoBack} />
+            </Appbar.Header>
+
             {
                 songs.length > 0 &&
                 <FlatList

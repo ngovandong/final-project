@@ -39,9 +39,9 @@ export default function MusicScreen()
   }, []);
 
   return (
-    <Stack.Navigator initialRouteName="TopCategory" screenOptions={{ header: CustomHeader }}>
-      <Stack.Screen name="TopCategory" component={TopCategory} />
-      <Stack.Screen name="SongList" component={SongList} />
+    <Stack.Navigator initialRouteName="TopCategory">
+      <Stack.Screen name="TopCategory" component={TopCategory} options={{ headerShown: false }} />
+      <Stack.Screen name="SongList" component={SongList} options={{ headerShown: false }} />
       <Stack.Screen name="SearchSong" component={SearchSong} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
