@@ -9,7 +9,7 @@ import React from "react";
 export default function SearchSong({ navigation })
 {
     const { songs } = useSelector(state => state.music);
-    const { Search_Song_Title, Clear_Song_Store } = useMusic();
+    const { searchSongTitle, clearSongStore } = useMusic();
 
     const renderSong = ({ item }) => <SongCard song={item} />;
 
@@ -17,15 +17,15 @@ export default function SearchSong({ navigation })
     {
         // Nếu không có thông tin thì song state không chứa gì cả
         if (query.length == 0)
-            Clear_Song_Store();
+            clearSongStore();
         else
-            Search_Song_Title(query);
+            searchSongTitle(query);
     };
 
     const handleGoBack = () =>
     {
         // Clear song ở Redux Store trước khi go back
-        Clear_Song_Store();
+        clearSongStore();
         navigation.goBack();
     };
 

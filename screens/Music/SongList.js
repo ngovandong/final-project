@@ -8,14 +8,14 @@ import React from "react";
 export default function SongList({ navigation })
 {
     const { songs, current_tc } = useSelector(state => state.music);
-    const { Clear_Song_Store } = useMusic();
+    const { clearSongStore } = useMusic();
 
     const renderSong = ({ item }) => <SongCard song={item} />;
 
     const handleGoBack = () =>
     {
         // Clear song ở Redux Store trước khi go back
-        Clear_Song_Store();
+        clearSongStore();
         navigation.goBack();
     };
 

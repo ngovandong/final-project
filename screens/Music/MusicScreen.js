@@ -11,30 +11,30 @@ const Stack = createNativeStackNavigator();
 
 export default function MusicScreen()
 {
-  const { Create_Table, Drop_Table, Get_Music_DB, Delete_All } = useMusic();
+  const { createMusicTable, dropMusicTable, getMusicDB, deleteAll } = useMusic();
 
   // useEffect(() =>
   // {
-  //   const drop_table = async () => Drop_Table();
-  //   drop_table();
+  //   const dropTable = async () => dropMusicTable();
+  //   dropTable();
   // }, []);
 
   // useEffect(() =>
   // {
-  //   const delete_all = async () => Delete_All();
-  //   delete_all();
+  //   const deleteDB = async () => deleteAll();
+  //   deleteDB();
   // }, []);
 
   useEffect(() =>
   {
-    const create_table = async () => Create_Table();
-    create_table();
+    const createTable = async () => createMusicTable();
+    createTable();
   }, []);
 
   useEffect(() =>
   {
-    const get_db = async () => Get_Music_DB();
-    get_db();
+    const getDB = async () => getMusicDB();
+    getDB();
   }, []);
 
   return (
