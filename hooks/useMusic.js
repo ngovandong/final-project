@@ -130,9 +130,24 @@ export default function useMusic()
         console.log(">> Cleared music table");
     };
 
+    const Reload_Music = async () =>
+    {
+        // Clear mọi thứ
+        await dispatch(SET_TOP_CATEGORY({
+            top_category: [],
+            isLoading: true,
+            exception: ""
+        }));
+        await Clear_Song_Store();
+        // Xóa hết dữ liệu trong Database
+        await Delete_All();
+        // Cập nhật lại Database bằng API
+        await Get_Music_DB();
+    };
+
     return {
         Create_Table, Drop_Table, Get_Music_API, Get_Music_DB,
         Filter_Song_Top_Category, Search_Song_Title, Clear_Song_Store,
-        Delete_TopCategory, Delete_Song, Delete_All
+        Delete_TopCategory, Delete_Song, Delete_All, Reload_Music
     };
 }
