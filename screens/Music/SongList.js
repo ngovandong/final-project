@@ -7,7 +7,7 @@ import React from "react";
 
 export default function SongList({ navigation })
 {
-    const { songs } = useSelector(state => state.music);
+    const { songs, current_tc } = useSelector(state => state.music);
     const { Clear_Song_Store } = useMusic();
 
     const renderSong = ({ item }) => <SongCard song={item} />;
@@ -23,6 +23,7 @@ export default function SongList({ navigation })
         <View>
             <Appbar.Header>
                 <Appbar.BackAction color='white' onPress={handleGoBack} />
+                <Appbar.Content color='white' title={current_tc} />
             </Appbar.Header>
 
             {

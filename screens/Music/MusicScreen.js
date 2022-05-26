@@ -3,7 +3,6 @@ import useMusic from "../../hooks/useMusic";
 import { StyleSheet } from "react-native";
 import React, { useEffect } from "react";
 
-import CustomHeader from './CustomHeader';
 import TopCategory from "./TopCategory";
 import SearchSong from "./SearchSong";
 import SongList from "./SongList";

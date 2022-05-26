@@ -13,11 +13,13 @@ import React from "react";
 export default function TopCategory({ navigation })
 {
     const { top_category, isLoading } = useSelector(state => state.music);
-    const { Filter_Song_Top_Category, Reload_Music } = useMusic();
+    const { Filter_Song_Top_Category, Set_Current_Top_Category, Reload_Music } = useMusic();
 
     const handleSelectCategory = async (top, category) =>
     {
         await Filter_Song_Top_Category(top, category);
+        // Đặt lại Title cho trang danh sách bài hát
+        Set_Current_Top_Category(`${formatTop(top)} - ${category}`);
         navigation.navigate("SongList");
     };
 

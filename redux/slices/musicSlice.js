@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const init = {
     top_category: [],
+    current_tc: "",
     songs: [],
     isLoading: true,
     exception: ""
@@ -19,6 +20,11 @@ export const musicSlice = createSlice({
             state.exception = exception;
             return state;
         },
+        SET_CURRENT_TC: (state, action) =>
+        {
+            state.current_tc = action.payload;
+            return state;
+        },
         SET_SONGS: (state, action) =>
         {
             state.songs = action.payload;
@@ -28,6 +34,6 @@ export const musicSlice = createSlice({
     extraReducers: {}
 });
 
-export const { SET_TOP_CATEGORY, SET_SONGS } = musicSlice.actions;
+export const { SET_TOP_CATEGORY, SET_CURRENT_TC, SET_SONGS } = musicSlice.actions;
 
 export default musicSlice.reducer;
