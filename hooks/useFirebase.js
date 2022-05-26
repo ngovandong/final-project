@@ -17,6 +17,8 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
+import { useDispatch } from "react-redux";
+import { OPEN_ERROR_MODAL, SET_ERROR_TEXT } from "../redux/slices/modalSlice";
 
 const FirebaseContext = React.createContext();
 
@@ -28,18 +30,23 @@ export function FirebaseProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
   const db = getFirestore();
+
+  const dispatch = useDispatch();
+
   async function signup(email, password) {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
     } catch (error) {
-      console.log(error);
+      dispatch(SET_ERROR_TEXT("Fail to signup!"));
+      dispatch(OPEN_ERROR_MODAL());
     }
   }
   async function login(email, password) {
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
-      console.log(error);
+      dispatch(SET_ERROR_TEXT("Wrong username or password!"));
+      dispatch(OPEN_ERROR_MODAL());
     }
   }
   function logout() {
