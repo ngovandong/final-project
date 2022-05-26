@@ -4,7 +4,7 @@ const init = {
     top_category: [],
     songs: [],
     isLoading: true,
-    exception: null
+    exception: ""
 }
 
 export const musicSlice = createSlice({
@@ -13,23 +13,21 @@ export const musicSlice = createSlice({
     reducers: {
         SET_TOP_CATEGORY: (state, action) =>
         {
-            state.top_category = action.payload;
+            const { top_category, isLoading, exception } = action.payload;
+            state.top_category = top_category;
+            state.isLoading = isLoading;
+            state.exception = exception;
             return state;
         },
         SET_SONGS: (state, action) =>
         {
             state.songs = action.payload;
             return state;
-        },
-        SET_MUSIC_DATA: (state, action) =>
-        {
-            // const {top_category, songs, isLoading, exception} = action.payload;
-            return action.payload;
         }
     },
     extraReducers: {}
 });
 
-export const { SET_TOP_CATEGORY, SET_SONGS, SET_MUSIC_DATA } = musicSlice.actions;
+export const { SET_TOP_CATEGORY, SET_SONGS } = musicSlice.actions;
 
 export default musicSlice.reducer;
