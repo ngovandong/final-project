@@ -1,5 +1,5 @@
+import { SET_TOP_CATEGORY, SET_CURRENT_TC, SET_SONGS } from "../redux/slices/musicSlice"
 import { GET_TOP_CATEGORY, FILTER_BY_TOP_CATEGORY } from "../api/apiMusic";
-import { SET_TOP_CATEGORY, SET_SONGS } from "../redux/slices/musicSlice"
 import TopCategoryContext from "../models/TopCategoryContext";
 import SongContext from "../models/SongContext";
 import { useDispatch } from 'react-redux';
@@ -92,6 +92,10 @@ export default function useMusic()
         }
     };
 
+    const Set_Current_Top_Category = (tc) =>
+    {
+        dispatch(SET_CURRENT_TC(tc));
+    };
 
     const Filter_Song_Top_Category = async (top, category) =>
     {
@@ -146,7 +150,7 @@ export default function useMusic()
     };
 
     return {
-        Create_Table, Drop_Table, Get_Music_API, Get_Music_DB,
+        Create_Table, Drop_Table, Get_Music_API, Get_Music_DB, Set_Current_Top_Category,
         Filter_Song_Top_Category, Search_Song_Title, Clear_Song_Store,
         Delete_TopCategory, Delete_Song, Delete_All, Reload_Music
     };
