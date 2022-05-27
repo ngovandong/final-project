@@ -18,15 +18,17 @@ const theme = {
   },
 };
 
-export default function App() {
+export default function App()
+{
   return (
     <Provider store={store}>
       <PaperProvider theme={theme}>
         <FirebaseProvider>
           <ErrorModal />
           <SuccessModal />
-          {Platform.OS === "ios" && <StatusBar />}
-          {Platform.OS !== "ios" && <StatusBarAndroid />}
+          {/* {Platform.OS === "ios" && <StatusBar />}
+          {Platform.OS !== "ios" && <StatusBarAndroid />} */}
+          <StatusBar />
           <Navigation />
         </FirebaseProvider>
       </PaperProvider>
