@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { auth } from "./firebase";
-import {
+import
+{
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
@@ -9,7 +10,8 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import {
+import
+{
   getFirestore,
   collection,
   addDoc,
@@ -22,37 +24,50 @@ import { OPEN_ERROR_MODAL, SET_ERROR_TEXT } from "../redux/slices/modalSlice";
 
 const FirebaseContext = React.createContext();
 
-export function useFirebase() {
+export function useFirebase() 
+{
   return useContext(FirebaseContext);
 }
 
-export function FirebaseProvider({ children }) {
+export function FirebaseProvider({ children })
+{
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
   const db = getFirestore();
 
   const dispatch = useDispatch();
 
-  async function signup(email, password) {
-    try {
+  async function signup(email, password) 
+  {
+    try
+    {
       await createUserWithEmailAndPassword(auth, email, password);
-    } catch (error) {
+    } catch (error)
+    {
+      //log error
       dispatch(SET_ERROR_TEXT("Fail to signup!"));
+      // open error dialog
       dispatch(OPEN_ERROR_MODAL());
     }
   }
-  async function login(email, password) {
-    try {
+  async function login(email, password)
+  {
+    try
+    {
       await signInWithEmailAndPassword(auth, email, password);
-    } catch (error) {
+    } catch (error)
+    {
       dispatch(SET_ERROR_TEXT("Wrong username or password!"));
       dispatch(OPEN_ERROR_MODAL());
     }
   }
-  function logout() {
-    try {
+  function logout()
+  {
+    try
+    {
       return signOut(auth);
-    } catch (error) {
+    } catch (error)
+    {
       console.log(error);
     }
   }
@@ -67,8 +82,10 @@ export function FirebaseProvider({ children }) {
     isLogined,
   };
 
-  useEffect(() => {
-    const unsubcribe = auth.onAuthStateChanged((user) => {
+  useEffect(() =>
+  {
+    const unsubcribe = auth.onAuthStateChanged((user) =>
+    {
       setCurrentUser(user);
       setLoading(currentUser);
     });
