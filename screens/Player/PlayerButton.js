@@ -4,7 +4,7 @@ import React from "react";
 
 export default function PlayerButton(props)
 {
-    const { iconType, size = 40, iconColor = "#303d49", onPress } = props;
+    const { iconType, size = 55, iconColor = "#303d49", onPress } = props;
 
     const getIconName = (type) =>
     {

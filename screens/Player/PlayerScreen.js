@@ -1,12 +1,39 @@
 import { StyleSheet, Text, View, StatusBar, Dimensions, Image } from "react-native";
 import Slider from '@react-native-community/slider';
 import PlayerButton from "./PlayerButton";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Audio } from 'expo-av';
 
 const { width } = Dimensions.get('window');
 
 export default function PlayerScreen()
 {
+  const [sound, setSound] = useState();
+
+  async function playSound()
+  {
+    console.log('Loading Sound');
+    const { sound } = await Audio.Sound.createAsync(
+      { uri: 'https://aredir.nixcdn.com/NhacCuaTui1021/CuoiThoi-MasewMasiuBRayTAPVietNam-7085648.mp3?st=Fdf-94PGaMjuqak7C3FJzw&e=1631635351' },
+      { shouldPlay: true }
+    );
+    setSound(sound);
+
+    console.log('Playing Sound');
+    await sound.playAsync();
+  }
+
+  useEffect(() =>
+  {
+    return sound
+      ? () =>
+      {
+        console.log('Unloading Sound');
+        sound.unloadAsync();
+      }
+      : undefined;
+  }, [sound]);
+
   return (
     <View style={styles.container}>
       <View style={styles.audioCountContainer}>
@@ -51,7 +78,7 @@ export default function PlayerScreen()
         </View>
 
         <Slider
-          style={{ width: width, height: 40 }}
+          style={{ width: width - 40, height: 40 }}
           minimumValue={0}
           maximumValue={1}
           minimumTrackTintColor={"#636363"}
@@ -101,7 +128,7 @@ export default function PlayerScreen()
 
           <PlayerButton iconType='PREV' onPress={() => { }} />
           <PlayerButton
-            onPress={() => { }}
+            onPress={playSound}
             style={{ marginHorizontal: 25 }}
             iconType={'PLAY'}
           />
@@ -116,15 +143,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    padding: 10,
+    padding: 20,
     paddingTop: StatusBar.currentHeight,
   },
   audioControllers: {
-    width,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 20,
+    paddingBottom: 10,
+    paddingTop: 10
   },
   audioCountContainer: {
     flexDirection: 'row',
