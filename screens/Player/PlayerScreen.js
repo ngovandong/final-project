@@ -1,139 +1,87 @@
-import { StyleSheet, Text, View, StatusBar, Dimensions, Image } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import Slider from '@react-native-community/slider';
-import PlayerButton from "./PlayerButton";
 import React, { useState, useEffect } from "react";
-import { Audio } from 'expo-av';
+import PlayerButton from "./PlayerButton";
 
-const { width } = Dimensions.get('window');
+const songs = [
+  {
+    avatar: "https://avatar-ex-swe.nixcdn.com/song/2021/03/12/e/2/9/e/1615554946033.jpg",
+    bgImage: "https://avatar-ex-swe.nixcdn.com/singer/avatar/2021/07/13/0/6/d/2/1626145766324_600.jpg",
+    coverImage: "https://avatar-ex-swe.nixcdn.com/playlist/2021/05/04/3/b/6/d/1620100988545_500.jpg",
+    creator: "Phúc Chinh",
+    lyric: "https://lrc-nct.nixcdn.com/2021/03/22/2/8/d/4/1616360845396.lrc",
+    music: "https://aredir.nixcdn.com/NhacCuaTui1012/TheLuong-PhucChinh-6971140.mp3?st=Gjvx3xDEIBRMoGsc2wLqkA&e=1631635351",
+    title: "Thê Lương",
+    url: "https://www.nhaccuatui.com/bai-hat/the-luong-phuc-chinh.nmxw6tXZyBQy.html"
+  },
+  {
+    avatar: "https://avatar-ex-swe.nixcdn.com/song/2021/09/09/f/c/f/d/1631181753902.jpg",
+    bgImage: "https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/10/29/a/a/d/4/1572318457703_600.jpg",
+    coverImage: "https://avatar-ex-swe.nixcdn.com/playlist/2021/05/04/3/b/6/d/1620100988545_500.jpg",
+    creator: "Masew, Masiu, B Ray, TAP",
+    lyric: "https://lrc-nct.nixcdn.com/null",
+    music: "https://aredir.nixcdn.com/NhacCuaTui1021/CuoiThoi-MasewMasiuBRayTAPVietNam-7085648.mp3?st=Fdf-94PGaMjuqak7C3FJzw&e=1631635351",
+    title: "Cưới Thôi",
+    url: "https://www.nhaccuatui.com/bai-hat/cuoi-thoi-masew-ft-masiu-ft-b-ray-ft-tap.SQTZSysfmPRJ.html"
+  },
+  {
+    avatar: "https://avatar-ex-swe.nixcdn.com/song/2021/08/15/a/7/9/2/1629021746388.jpg",
+    bgImage: "https://avatar-ex-swe.nixcdn.com/singer/avatar/2020/08/13/a/9/8/e/1597294555540_600.jpg",
+    coverImage: "https://avatar-ex-swe.nixcdn.com/playlist/2021/05/04/3/b/6/d/1620100988545_500.jpg",
+    creator: "Tăng Duy Tân",
+    lyric: "https://lrc-nct.nixcdn.com/2021/08/15/d/8/0/6/1629022926567.lrc",
+    music: "https://aredir.nixcdn.com/Warner_Audio72/DaVu-TangDuyTan-7068051.mp3?st=Kp17_rGyQ2uLyHv7v6chDg&e=1631635351",
+    title: "Dạ Vũ",
+    url: "https://www.nhaccuatui.com/bai-hat/da-vu-tang-duy-tan.8Q8yLCcES92H.html"
+  },
+]
 
 export default function PlayerScreen()
 {
-  const [sound, setSound] = useState();
-
-  async function playSound()
-  {
-    console.log('Loading Sound');
-    const { sound } = await Audio.Sound.createAsync(
-      { uri: 'https://aredir.nixcdn.com/NhacCuaTui1021/CuoiThoi-MasewMasiuBRayTAPVietNam-7085648.mp3?st=Fdf-94PGaMjuqak7C3FJzw&e=1631635351' },
-      { shouldPlay: true }
-    );
-    setSound(sound);
-
-    console.log('Playing Sound');
-    await sound.playAsync();
-  }
-
-  useEffect(() =>
-  {
-    return sound
-      ? () =>
-      {
-        console.log('Unloading Sound');
-        sound.unloadAsync();
-      }
-      : undefined;
-  }, [sound]);
-
   return (
     <View style={styles.container}>
-      <View style={styles.audioCountContainer}>
-        <View style={{ flexDirection: 'row' }}>
-          {/* {context.isPlayListRunning && (
-            <>
-              <Text style={{ fontWeight: 'bold' }}>From Playlist: </Text>
-              <Text>{context.activePlayList.title}</Text>
-            </>
-          )} */}
-          <Text>ahihi</Text>
-        </View>
-        <Text style={styles.audioCount}>
-          {/* {`${context.currentAudioIndex + 1} / ${context.totalAudioCount}`} */}
-          123
-        </Text>
+      <View style={styles.artworkWrapper}>
+        <Image source={{ uri: songs[1].avatar }} style={styles.artworkImage} />
       </View>
-      <View style={styles.midBannerContainer}>
-        <Image style={styles.bannerImage} source={{ uri: "https://avatar-ex-swe.nixcdn.com/song/2021/09/09/f/c/f/d/1631181753902.jpg" }} />
+
+      <View style={styles.inforBar}>
+        <Text style={styles.titleInfor}>{songs[1].title}</Text>
+        <Text style={styles.creatorInfor}>{songs[1].creator}</Text>
       </View>
-      <View style={styles.audioPlayerContainer}>
-        <Text numberOfLines={1} style={styles.audioTitle}>
-          {/* {context.currentAudio.filename} */}
-          Em la nhat
-        </Text>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingHorizontal: 15,
-          }}
-        >
-          <Text>
-            {/* {convertTime(context.currentAudio.duration)} */}
-            01.00
-          </Text>
-          <Text>
-            {/* {currentPosition ? currentPosition : renderCurrentTime()} */}
-            10
-          </Text>
-        </View>
-
+      <View style={styles.progressSliderBar}>
         <Slider
-          style={{ width: width - 40, height: 40 }}
+          style={styles.progressSlider}
+          value={10}
           minimumValue={0}
-          maximumValue={1}
-          minimumTrackTintColor={"#636363"}
-          maximumTrackTintColor={"#5252ad"}
+          maximumValue={100}
+          thumbTintColor="#2ea9ed"
+          minimumTrackTintColor="#2ea9ed"
+          maximumTrackTintColor="black"
+          onSlidingComplete={() => { }}
         />
+      </View>
 
-        {/* <Slider
-          style={{ width: width, height: 40 }}
-          minimumValue={0}
-          maximumValue={1}
-          value={calculateSeebBar()}
-          minimumTrackTintColor={"#636363"}
-          maximumTrackTintColor={"#5252ad"}
-          onValueChange={value =>
-          {
-            setCurrentPosition(
-              convertTime(value * context.currentAudio.duration)
-            );
-          }}
-          onSlidingStart={async () =>
-          {
-            if (!context.isPlaying) return;
+      <View style={styles.progressLabel}>
+        <Text style={styles.progressLabelText}>0:00</Text>
+        <Text style={styles.progressLabelText}>5:61</Text>
+      </View>
 
-            try
-            {
-              await pause(context.playbackObj);
-            } catch (error)
-            {
-              console.log('error inside onSlidingStart callback', error);
-            }
-          }}
-          onSlidingComplete={async value =>
-          {
-            await moveAudio(context, value);
-            setCurrentPosition(0);
-          }}
-        /> */}
+      <View style={styles.musicController}>
+        <TouchableOpacity onPress={() => { }} activeOpacity={0.5}>
+          <Ionicons name="play-skip-back-outline" size={45}
+            color="black" style={styles.playBackForward} />
+        </TouchableOpacity>
 
-        <View style={styles.audioControllers}>
-          {/* <PlayerButton iconType='PREV' onPress={handlePrevious} />
-          <PlayerButton
-            onPress={handlePlayPause}
-            style={{ marginHorizontal: 25 }}
-            iconType={context.isPlaying ? 'PLAY' : 'PAUSE'}
-          />
-          <PlayerButton iconType='NEXT' onPress={handleNext} /> */}
+        <TouchableOpacity onPress={() => { }} activeOpacity={0.5}>
+          <Ionicons name="ios-pause-circle" size={80} color="black" />
+        </TouchableOpacity>
 
-          <PlayerButton iconType='PREV' onPress={() => { }} />
-          <PlayerButton
-            onPress={playSound}
-            style={{ marginHorizontal: 25 }}
-            iconType={'PLAY'}
-          />
-          <PlayerButton iconType='NEXT' onPress={() => { }} />
-        </View>
+        <TouchableOpacity onPress={() => { }} activeOpacity={0.5}>
+          <Ionicons name="play-skip-forward-outline" size={45}
+            color="black" style={styles.playBackForward} />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -142,40 +90,71 @@ export default function PlayerScreen()
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
-    padding: 20,
-    paddingTop: StatusBar.currentHeight,
+    alignItems: "center",
+    justifyContent: "center"
   },
-  audioControllers: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: 10,
-    paddingTop: 10
-  },
-  audioCountContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 15,
-  },
-  audioCount: {
-    textAlign: 'right',
-    color: "#b6b8b9",
-    fontSize: 14,
-  },
-  midBannerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  bannerImage: {
-    width: 300,
+  /*-------ARTWORK------*/
+  artworkWrapper: {
+    width: 260,
     height: 300,
-    borderRadius: 300
+    marginBottom: 20,
+    marginTop: 25,
+    // iOS
+    shadowColor: "#949996",
+    shadowOffset: {
+      width: 5,
+      height: 5
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84,
+    // Android
+    elevation: 5
   },
-  audioTitle: {
+  artworkImage: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 15
+  },
+  /*-------INFOR------*/
+  inforBar: {
+    marginTop: 10
+  },
+  titleInfor: {
+    fontSize: 20,
+    fontWeight: "800",
+    textAlign: "center",
+    color: "black"
+  },
+  creatorInfor: {
     fontSize: 16,
-    color: "#303d49",
-    padding: 15,
+    fontWeight: "300",
+    textAlign: "center",
+    color: "black"
   },
+  /*-------SLIDER------*/
+  progressSlider: {
+    width: 320,
+    height: 40,
+    marginTop: 25,
+    flexDirection: "row"
+  },
+  /*-------TIMER------*/
+  progressLabel: {
+    width: 320,
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  progressLabelText: {
+    color: "black"
+  },
+  /*-------CONTROLLER------*/
+  musicController: {
+    flexDirection: "row",
+    width: "60%",
+    justifyContent: "space-between",
+    marginTop: 15
+  },
+  playBackForward: {
+    marginTop: 20
+  }
 });
