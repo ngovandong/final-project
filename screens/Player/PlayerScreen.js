@@ -42,10 +42,11 @@ export default function PlayerScreen()
 
     const loadAudio = async () =>
     {
-        const { currentIndex, isPlaying, volume } = player;
+        let { currentIndex, isPlaying, volume } = player;
+        console.log(currentIndex);
         try
         {
-            const playbackInstance = new Audio.Sound();
+            let playbackInstance = new Audio.Sound();
             const source = {
                 uri: songs[currentIndex].music
             };
@@ -98,8 +99,12 @@ export default function PlayerScreen()
 
     const handlePlayPause = async () =>
     {
-        const { isPlaying, playbackInstance } = player;
-        isPlaying ? await playbackInstance.pauseAsync() : await playbackInstance.playAsync()
+
+        let { isPlaying, playbackInstance } = player;
+        if (isPlaying)
+            await playbackInstance.pauseAsync();
+        else
+            await playbackInstance.playAsync();
         console.log("Pause/Play");
         setPlayer(player => ({
             ...player,
@@ -113,9 +118,12 @@ export default function PlayerScreen()
         if (playbackInstance)
         {
             console.log("Previous");
-            await playbackInstance.unloadAsync()
-            currentIndex < songs.length - 1 ? (currentIndex -= 1) : (currentIndex = 0)
-            setPlayer(player => ({
+            await playbackInstance.unloadAsync();
+            if (currentIndex === 0)
+                currentIndex = songs.length - 1;
+            else
+                currentIndex -= 1;
+            await setPlayer(player => ({
                 ...player,
                 currentIndex
             }));
@@ -129,9 +137,12 @@ export default function PlayerScreen()
         if (playbackInstance)
         {
             console.log("Next");
-            await playbackInstance.unloadAsync()
-            currentIndex < songs.length - 1 ? (currentIndex += 1) : (currentIndex = 0)
-            setPlayer(player => ({
+            await playbackInstance.unloadAsync();
+            if (currentIndex === songs.length - 1)
+                currentIndex = 0;
+            else
+                currentIndex += 1;
+            await setPlayer(player => ({
                 ...player,
                 currentIndex
             }));
@@ -174,11 +185,6 @@ export default function PlayerScreen()
                         color="black" style={styles.playBackForward} />
                 </TouchableOpacity>
 
-                {/* <TouchableOpacity onPress={() => togglePlayback(playbackState)} activeOpacity={0.5}>
-          <Ionicons name={playbackState === State.Playing ?
-            "ios-pause-circle" : "ios-play-circle"}
-            size={80} color="black" />
-        </TouchableOpacity> */}
                 <TouchableOpacity onPress={handlePlayPause} activeOpacity={0.5}>
                     <Ionicons name={player.isPlaying ? "ios-pause-circle" : "ios-play-circle"}
                         size={80} color="black" />
