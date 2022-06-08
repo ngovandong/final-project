@@ -40,10 +40,29 @@ export default function PlayerScreen()
         setupPlayer();
     }, []);
 
-    const loadAudio = async () =>
+    const setupPlayer = async () =>
     {
-        let { currentIndex, isPlaying, volume } = player;
-        console.log(currentIndex);
+        try
+        {
+            await Audio.setAudioModeAsync({
+                allowsRecordingIOS: false,
+                playsInSilentModeIOS: true,
+                shouldDuckAndroid: true,
+                staysActiveInBackground: true,
+                playThroughEarpieceAndroid: true
+            });
+            loadAudio(player.currentIndex);
+        }
+        catch (e)
+        {
+            console.log(e);
+        }
+    };
+
+    const loadAudio = async (currentIndex) =>
+    {
+        let { isPlaying, volume } = player;
+        console.log("Current Index : ", currentIndex);
         try
         {
             let playbackInstance = new Audio.Sound();
@@ -70,25 +89,6 @@ export default function PlayerScreen()
         }
     };
 
-    const setupPlayer = async () =>
-    {
-        try
-        {
-            await Audio.setAudioModeAsync({
-                allowsRecordingIOS: false,
-                playsInSilentModeIOS: true,
-                shouldDuckAndroid: true,
-                staysActiveInBackground: true,
-                playThroughEarpieceAndroid: true
-            });
-            loadAudio();
-        }
-        catch (e)
-        {
-            console.log(e);
-        }
-    };
-
     const onPlaybackStatusUpdate = (status) =>
     {
         setPlayer(player => ({
@@ -105,7 +105,6 @@ export default function PlayerScreen()
             await playbackInstance.pauseAsync();
         else
             await playbackInstance.playAsync();
-        console.log("Pause/Play");
         setPlayer(player => ({
             ...player,
             isPlaying: !isPlaying
@@ -117,17 +116,17 @@ export default function PlayerScreen()
         let { playbackInstance, currentIndex } = player;
         if (playbackInstance)
         {
-            console.log("Previous");
             await playbackInstance.unloadAsync();
+            let currentIndex = player.currentIndex;
             if (currentIndex === 0)
                 currentIndex = songs.length - 1;
             else
                 currentIndex -= 1;
-            await setPlayer(player => ({
+            setPlayer(player => ({
                 ...player,
                 currentIndex
             }));
-            loadAudio();
+            loadAudio(currentIndex);
         }
     };
 
@@ -136,17 +135,17 @@ export default function PlayerScreen()
         let { playbackInstance, currentIndex } = player;
         if (playbackInstance)
         {
-            console.log("Next");
             await playbackInstance.unloadAsync();
+            let currentIndex = player.currentIndex;
             if (currentIndex === songs.length - 1)
                 currentIndex = 0;
             else
                 currentIndex += 1;
-            await setPlayer(player => ({
+            setPlayer(player => ({
                 ...player,
                 currentIndex
             }));
-            loadAudio();
+            loadAudio(currentIndex);
         }
     };
 
