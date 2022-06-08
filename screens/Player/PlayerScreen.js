@@ -1,8 +1,9 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { getSongDuration } from "../../helpers/extension";
 import Slider from '@react-native-community/slider';
 import React, { useState, useEffect } from "react";
-import { Audio } from 'expo-av'
+import { Audio } from 'expo-av';
 
 const songs = [
     {
@@ -27,12 +28,23 @@ const songs = [
 
 export default function PlayerScreen()
 {
+    /*
+    isPlaying : đang phát nhạc hay không ?
+    playbackInstance : đối tượng phát nhạc được tạo ra từ expo-av
+    currentIndex : chỉ mục của bài hát hiện tại trong Mảng bài hát
+    volume : âm lượng 
+    isBuffering : đang phát nhạc hay không ????
+    playbackPosition : thời gian mà bài hát đã phát 
+    playbackDuration : tổng thời gian của bài hát
+    */
     const [player, setPlayer] = useState({
         isPlaying: false,
         playbackInstance: null,
         currentIndex: 0,
         volume: 1.0,
-        isBuffering: true
+        isBuffering: true,
+        playbackPosition: 0,
+        playbackDuration: 10
     });
 
     useEffect(() =>
@@ -42,6 +54,7 @@ export default function PlayerScreen()
 
     const setupPlayer = async () =>
     {
+        // Hàm setup expo-av player
         try
         {
             await Audio.setAudioModeAsync({
@@ -61,23 +74,26 @@ export default function PlayerScreen()
 
     const loadAudio = async (currentIndex) =>
     {
+        // Hàm làm mới trình phát nhạc
         let { isPlaying, volume } = player;
-        console.log("Current Index : ", currentIndex);
         try
         {
+            // Khởi tạo đối tượng phát nhạc mới
             let playbackInstance = new Audio.Sound();
+            // Url bài hát
             const source = {
                 uri: songs[currentIndex].music
             };
-
+            // Trạng thái phát nhạc
             const status = {
                 shouldPlay: isPlaying,
                 volume: volume
             };
-
+            // Callback sẽ chạy khi bài hát đang được phát
             playbackInstance.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
+            // Load đối tượng phát nhạc
             await playbackInstance.loadAsync(source, status, false);
-
+            // Lưu vào state
             setPlayer(player => ({
                 ...player,
                 playbackInstance
@@ -85,21 +101,25 @@ export default function PlayerScreen()
         }
         catch (e)
         {
-            console.log(e)
+            console.log(e);
         }
     };
 
     const onPlaybackStatusUpdate = (status) =>
     {
+        // Hàm cập nhật state khi nhạc được phát
+        // Cập nhật lại playbackPosition là thời gian bài hát đã được phát
         setPlayer(player => ({
             ...player,
-            isBuffering: status.isBuffering
+            isBuffering: status.isBuffering,
+            playbackPosition: status.positionMillis,
+            playbackDuration: status.durationMillis
         }));
-    }
+    };
 
     const handlePlayPause = async () =>
     {
-
+        // Hàm play/pause bài hát
         let { isPlaying, playbackInstance } = player;
         if (isPlaying)
             await playbackInstance.pauseAsync();
@@ -113,7 +133,8 @@ export default function PlayerScreen()
 
     const handlePreviousPlay = async () =>
     {
-        let { playbackInstance, currentIndex } = player;
+        // Hàm chuyển về bài trước đó, nếu đang là bài đầu tiên thì chuyển về bài cuối cùng
+        let { playbackInstance } = player;
         if (playbackInstance)
         {
             await playbackInstance.unloadAsync();
@@ -126,13 +147,16 @@ export default function PlayerScreen()
                 ...player,
                 currentIndex
             }));
+            // Do state chưa kịp update currentIndex mới nên hàm loadAudio
+            // cần tự truyền vào currentIndex chứ không thể tự lấy ra từ state
             loadAudio(currentIndex);
         }
     };
 
     const handleNextPlay = async () =>
     {
-        let { playbackInstance, currentIndex } = player;
+        // Hàm chuyển đến bài tiếp theo, nếu đang là bài cuối thì chuyển về bài đầu tiên
+        let { playbackInstance } = player;
         if (playbackInstance)
         {
             await playbackInstance.unloadAsync();
@@ -145,27 +169,47 @@ export default function PlayerScreen()
                 ...player,
                 currentIndex
             }));
+            // Do state chưa kịp update currentIndex mới nên hàm loadAudio
+            // cần tự truyền vào currentIndex chứ không thể tự lấy ra từ state
             loadAudio(currentIndex);
         }
+    };
+
+    const calculateSeebBar = () =>
+    {
+        // Hàm tính toán tỉ lệ thơi gian hiện tại để cập nhật cho Slider
+        const { playbackPosition, playbackDuration } = player;
+        if (playbackPosition !== undefined && playbackDuration !== undefined)
+        {
+            return playbackPosition / playbackDuration;
+        }
+        return 0;
     };
 
     return (
         <View style={styles.container}>
             <View style={styles.artworkWrapper}>
-                <Image source={{ uri: songs[player.currentIndex].avatar }} style={styles.artworkImage} />
+                <Image
+                    source={{ uri: songs[player.currentIndex].avatar }}
+                    style={styles.artworkImage}
+                />
             </View>
 
             <View style={styles.inforBar}>
-                <Text style={styles.titleInfor}>{songs[player.currentIndex].title}</Text>
-                <Text style={styles.creatorInfor}>{songs[player.currentIndex].creator}</Text>
+                <Text style={styles.titleInfor}>
+                    {songs[player.currentIndex].title}
+                </Text>
+                <Text style={styles.creatorInfor}>
+                    {songs[player.currentIndex].creator}
+                </Text>
             </View>
 
             <View style={styles.progressSliderBar}>
                 <Slider
                     style={styles.progressSlider}
-                    value={10}
+                    value={calculateSeebBar()}
                     minimumValue={0}
-                    maximumValue={100}
+                    maximumValue={1}
                     thumbTintColor="#2ea9ed"
                     minimumTrackTintColor="#2ea9ed"
                     maximumTrackTintColor="black"
@@ -174,8 +218,12 @@ export default function PlayerScreen()
             </View>
 
             <View style={styles.progressLabel}>
-                <Text style={styles.progressLabelText}>0:00</Text>
-                <Text style={styles.progressLabelText}>5:61</Text>
+                <Text style={styles.progressLabelText}>
+                    {getSongDuration(player.playbackPosition)}
+                </Text>
+                <Text style={styles.progressLabelText}>
+                    {getSongDuration(player.playbackDuration)}
+                </Text>
             </View>
 
             <View style={styles.musicController}>
