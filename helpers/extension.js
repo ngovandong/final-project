@@ -27,7 +27,7 @@ export function getSongDuration(duration)
     if (min !== NaN && sec !== NaN)
         return min + ':' + sec;
     else
-        return "1:00";
+        return "0:00";
 }
 
 export function getAudioTimeString(seconds)

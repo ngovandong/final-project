@@ -49,21 +49,24 @@ export default function PlayerScreen()
 
     useEffect(() =>
     {
+        // Thiết lập Player
         setupPlayer();
     }, []);
 
-    // useEffect(() =>
-    // {
-    //     console.log(player.playbackPosition, player.playbackDuration);
-    //     const autoNextSong = async () =>
-    //     {
-    //         if (player.playbackPosition !== undefined &&
-    //             player.playbackDuration !== undefined &&
-    //             player.playbackPosition === player.playbackDuration)
-    //             await handleNextPlay();
-    //     }
-    //     autoNextSong();
-    // }, [player.playbackPosition, player.playbackDuration]);
+    useEffect(() =>
+    {
+        // Effect tự động chuyển bài khi bài hiện tại kết thúc
+        // Vì playbackPosition không thể bằng playbackDuration (thư viện củ chuối)
+        // Nên ta chỉ cần lấy tỉ lệ > 0.99 là được
+        const autoNextSong = async () =>
+        {
+            if (player.playbackPosition !== undefined &&
+                player.playbackDuration !== undefined &&
+                player.playbackPosition / player.playbackDuration > 0.99)
+                await handleNextPlay();
+        }
+        autoNextSong();
+    }, [player.playbackPosition, player.playbackDuration]);
 
     const setupPlayer = async () =>
     {
