@@ -24,10 +24,10 @@ export function getSongDuration(duration)
     }
     min = Math.floor(min);
     // Nếu min và sec bị NAN thì ta return tạm về 0:00
-    if (min && sec)
+    if (min !== NaN && sec !== NaN)
         return min + ':' + sec;
     else
-        return "0:00";
+        return "1:00";
 }
 
 export function getAudioTimeString(seconds)

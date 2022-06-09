@@ -52,6 +52,19 @@ export default function PlayerScreen()
         setupPlayer();
     }, []);
 
+    // useEffect(() =>
+    // {
+    //     console.log(player.playbackPosition, player.playbackDuration);
+    //     const autoNextSong = async () =>
+    //     {
+    //         if (player.playbackPosition !== undefined &&
+    //             player.playbackDuration !== undefined &&
+    //             player.playbackPosition === player.playbackDuration)
+    //             await handleNextPlay();
+    //     }
+    //     autoNextSong();
+    // }, [player.playbackPosition, player.playbackDuration]);
+
     const setupPlayer = async () =>
     {
         // Hàm setup expo-av player
@@ -213,7 +226,7 @@ export default function PlayerScreen()
                     thumbTintColor="#2ea9ed"
                     minimumTrackTintColor="#2ea9ed"
                     maximumTrackTintColor="black"
-                    onSlidingComplete={() => { }}
+                    onSlidingComplete={() => console.log("ahihi")}
                 />
             </View>
 
