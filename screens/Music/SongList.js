@@ -12,6 +12,7 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 export default function SongList({ navigation })
 {
     const { songs, current_tc } = useSelector(state => state.music);
+
     const { clearSongStore } = useMusic();
 
     const _dataProvider = new DataProvider((r1, r2) => r1 !== r2).cloneWithRows(songs);
@@ -29,7 +30,7 @@ export default function SongList({ navigation })
     {
         // Clear song ở Redux Store trước khi go back
         clearSongStore();
-        navigation.goBack();
+        navigation.navigate("Music", { screen: "TopCategory" })
     };
 
     return (

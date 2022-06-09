@@ -1,10 +1,13 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import React from "react";
+import { useFirebase } from "../../hooks/useFirebase";
 
 export default function SongCard({ song })
 {
+    const { addSong } = useFirebase();
+
     return (
-        <TouchableOpacity style={styles.songCard} activeOpacity={0.5}>
+        <TouchableOpacity style={styles.songCard} activeOpacity={0.5} onLongPress={() => { addSong(song) }}>
             <View style={styles.imgBox}>
                 <Image style={styles.avatarIMG} source={{ uri: song.avatar }} />
             </View>

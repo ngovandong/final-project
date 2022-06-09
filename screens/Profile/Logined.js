@@ -1,10 +1,20 @@
+import { useNavigation } from "@react-navigation/native";
 import { View, Text, StyleSheet } from "react-native";
 import { Appbar, Avatar, Button, List } from "react-native-paper";
 import { useFirebase } from "../../hooks/useFirebase";
+import useMusic from "../../hooks/useMusic";
 
 function Logined()
 {
-  const { logout } = useFirebase();
+  const { logout, getListFavorite, currentUser } = useFirebase();
+  const { setCurrentSongs, setCurrentTopCategory } = useMusic()
+  const navigation = useNavigation();
+  const favoriteClick = () =>
+  {
+    setCurrentTopCategory("My favorite")
+    getListFavorite().then((songs) => setCurrentSongs(songs))
+    navigation.navigate('Music', { screen: 'SongList' })
+  }
   return (
     <View style={styles.container}>
       <Appbar.Header>
@@ -14,8 +24,8 @@ function Logined()
         <View style={{ flex: 1 }}>
           <Text style={{ flex: 1, marginLeft: 5, color: "#555", fontWeight: "600" }}  > Account</Text>
           <View style={styles.my}>
-            <Avatar.Text size={40} style={{ marginRight: 10 }} label="D" />
-            <Text style={{ fontWeight: "bold", fontSize: 16 }}>dongngo2001@gmail.com</Text>
+            <Avatar.Text size={40} style={{ marginRight: 10 }} label={currentUser.email[0]} />
+            <Text style={{ fontWeight: "bold", fontSize: 16 }}>{currentUser.email}</Text>
           </View>
         </View>
       </View>
@@ -36,7 +46,7 @@ function Logined()
             left={props => <List.Icon {...props} icon="book-music" />}
           />
           <List.Item
-            onPress={() => { }}
+            onPress={favoriteClick}
             title="My favorite"
             left={props => <List.Icon {...props} icon="heart" />}
           />

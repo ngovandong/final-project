@@ -5,10 +5,6 @@ import
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  sendPasswordResetEmail,
-  updatePassword,
-  GoogleAuthProvider,
-  signInWithPopup,
 } from "firebase/auth";
 import
 {
@@ -18,9 +14,11 @@ import
   query,
   where,
   getDocs,
+  doc,
+  setDoc
 } from "firebase/firestore";
 import { useDispatch } from "react-redux";
-import { OPEN_ERROR_MODAL, SET_ERROR_TEXT } from "../redux/slices/modalSlice";
+import { OPEN_ERROR_MODAL, OPEN_SUCCESS_MODAL, SET_ERROR_TEXT, SET_SUCCESS_TEXT } from "../redux/slices/modalSlice";
 
 const FirebaseContext = React.createContext();
 
@@ -71,8 +69,39 @@ export function FirebaseProvider({ children })
       console.log(error);
     }
   }
+
   const isLogined = currentUser != null;
 
+  async function addSong(song)
+  {
+    try
+    {
+      const q = query(collection(db, "songs"), where("music", "==", song.music));
+
+      const querySnapshot = await getDocs(q);
+      if (querySnapshot.empty)
+      {
+        await addDoc(collection(db, "songs"), song);
+        dispatch(SET_SUCCESS_TEXT("Song is added to favorite!"));
+        // open error dialog
+        dispatch(OPEN_SUCCESS_MODAL());
+      } else
+      {
+        throw Error("Song already exists!")
+      }
+    } catch (error)
+    {
+      dispatch(SET_ERROR_TEXT(error.toString()));
+      // open error dialog
+      dispatch(OPEN_ERROR_MODAL());
+    }
+  }
+  async function getListFavorite()
+  {
+    const querySnapshot = await getDocs(collection(db, "songs"));
+    return querySnapshot.docs.map((res) => res.data())
+
+  }
   const value = {
     db,
     currentUser,
@@ -80,6 +109,8 @@ export function FirebaseProvider({ children })
     signup,
     logout,
     isLogined,
+    addSong,
+    getListFavorite
   };
 
   useEffect(() =>
