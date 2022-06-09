@@ -12,22 +12,26 @@ export function formatTop(s)
 
 export function getSongDuration(duration)
 {
-    // Hàm chuyển miliseconds sang phút:giây
-    let ms = duration;
-    let min = ms / 1000 / 60;
-    let r = min % 1;
-    let sec = Math.floor(r * 60);
-
-    if (sec < 10)
+    if (duration)
     {
-        sec = '0' + sec;
+        // Hàm chuyển miliseconds sang phút:giây
+        let ms = duration;
+        let min = ms / 1000 / 60;
+        let r = min % 1;
+        let sec = Math.floor(r * 60);
+
+        if (sec < 10)
+        {
+            sec = '0' + sec;
+        }
+        min = Math.floor(min);
+        // Nếu min và sec bị NAN thì ta return tạm về 0:00
+        if (min !== NaN && sec !== NaN)
+            return min + ':' + sec;
+        else
+            return "0:00";
     }
-    min = Math.floor(min);
-    // Nếu min và sec bị NAN thì ta return tạm về 0:00
-    if (min !== NaN && sec !== NaN)
-        return min + ':' + sec;
-    else
-        return "0:00";
+    return "0:00";
 }
 
 export function getAudioTimeString(seconds)
