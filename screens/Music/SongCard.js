@@ -1,13 +1,17 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React from "react";
 import { useFirebase } from "../../hooks/useFirebase";
+import usePlayer from "../../hooks/usePlayer";
+import React from "react";
 
 export default function SongCard({ song })
 {
+    const { addTrackToPlayer } = usePlayer();
     const { addSong } = useFirebase();
 
     return (
-        <TouchableOpacity style={styles.songCard} activeOpacity={0.5} onLongPress={() => { addSong(song) }}>
+        <TouchableOpacity style={styles.songCard} activeOpacity={0.5}
+            onPress={() => addTrackToPlayer(song)}
+            onLongPress={() => { addSong(song) }}>
             <View style={styles.imgBox}>
                 <Image style={styles.avatarIMG} source={{ uri: song.avatar }} />
             </View>
