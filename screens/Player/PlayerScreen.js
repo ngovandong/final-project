@@ -3,83 +3,12 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { getSongDuration } from "../../helpers/extension";
 import Slider from '@react-native-community/slider';
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Audio } from 'expo-av';
-
-const songs = [
-    {
-        avatar: "https://avatar-ex-swe.nixcdn.com/song/2017/11/01/8/9/5/4/1509504821826.jpg",
-        bgImage: "https://avatar-ex-swe.nixcdn.com/singer/avatar/2020/10/28/6/b/8/9/1603867029190_600.jpg",
-        coverImage: "https://avatar-ex-swe.nixcdn.com/playlist/2021/05/26/b/e/2/9/1622014505032_500.jpg",
-        creator: "Ariana Grande, Nicki Minaj",
-        lyric: "https://lrc-nct.nixcdn.com/2016/12/13/4/d/3/7/1481609376317.lrc",
-        music: "https://aredir.nixcdn.com/Unv_Audio75/SideToSide-ArianaGrandeNickiMinaj-5319387.mp3?st=YsSOqZW2qY5Q6bjlUWmDJQ&e=1631635369",
-        title: "Side To Side",
-        url: "https://www.nhaccuatui.com/bai-hat/side-to-side-ariana-grande-ft-nicki-minaj.O4stLs6DzdKx.html"
-    },
-    {
-        avatar: "https://avatar-ex-swe.nixcdn.com/song/2018/06/22/0/c/c/b/1529655970762.jpg",
-        bgImage: "https://avatar-ex-swe.nixcdn.com/singer/avatar/2018/02/08/d/9/d/9/1518102796944_600.jpg",
-        coverImage: "https://avatar-ex-swe.nixcdn.com/playlist/2021/05/26/b/e/2/9/1622014505032_500.jpg",
-        creator: "Maroon 5",
-        lyric: "https://lrc-nct.nixcdn.com/2015/02/22/5/4/8/e/1424606806135.lrc",
-        music: "https://aredir.nixcdn.com/Unv_Audio73/Sugar-Maroon5-3338455.mp3?st=BvKZKnL226gGdRcbbuFD-Q&e=1631635369",
-        title: "Sugar",
-        url: "https://www.nhaccuatui.com/bai-hat/sugar-maroon-5.eZqJdBiX1raA.html"
-    },
-    {
-        avatar: "https://avatar-ex-swe.nixcdn.com/song/2017/10/03/c/c/f/9/1506994069006.jpg",
-        bgImage: "https://avatar-ex-swe.nixcdn.com/singer/avatar/2016/01/25/4/1/1/7/1453717591437_600.jpg",
-        coverImage: "https://avatar-ex-swe.nixcdn.com/playlist/2021/05/26/b/e/2/9/1622014505032_500.jpg",
-        creator: "Jessie J, Ariana Grande, Nicki Minaj",
-        lyric: "https://lrc-nct.nixcdn.com/2014/09/23/c/8/b/9/1411479917710.lrc",
-        music: "https://aredir.nixcdn.com/Unv_Audio21/BangBang-JessieJArianaGrandeNickiMinaj-3336065.mp3?st=_FB8qm7RCB7p5IR3ZUtAmA&e=1631635369",
-        title: "Bang Bang",
-        url: "https://www.nhaccuatui.com/bai-hat/bang-bang-jessie-j-ft-ariana-grande-ft-nicki-minaj.uJpUD2uosAd0.html"
-    },
-    {
-        avatar: "https://avatar-ex-swe.nixcdn.com/song/2018/08/29/a/7/9/a/1535524424716.jpg",
-        bgImage: "https://avatar-ex-swe.nixcdn.com/singer/avatar/2016/12/22/5/a/d/7/1482395179151_600.jpg",
-        coverImage: "https://avatar-ex-swe.nixcdn.com/playlist/2021/05/26/b/e/2/9/1622014505032_500.jpg",
-        creator: "Pitbull, Kesha",
-        lyric: "https://lrc-nct.nixcdn.com/2016/03/02/3/9/8/6/1456912264370.lrc",
-        music: "https://aredir.nixcdn.com/Sony_Audio46/Timber-PitbullKeha-5612609.mp3?st=CdJPIqJQnIuIMiiI_f-Khg&e=1631635369",
-        title: "Timber",
-        url: "https://www.nhaccuatui.com/bai-hat/timber-pitbull-ft-kesha.Wvw8GjerWgL0.html"
-    },
-    {
-        avatar: "https://avatar-ex-swe.nixcdn.com/song/2018/01/25/5/2/d/e/1516891769034.jpg",
-        bgImage: "https://avatar-ex-swe.nixcdn.com/singer/avatar/2021/06/25/5/6/f/6/1624608342223_600.jpg",
-        coverImage: "https://avatar-ex-swe.nixcdn.com/playlist/2021/05/26/b/e/2/9/1622014505032_500.jpg",
-        creator: "Ed Sheeran",
-        lyric: "https://lrc-nct.nixcdn.com/2017/06/20/a/c/0/4/1497891884063.lrc",
-        music: "https://aredir.nixcdn.com/Warner_Audio38/ShapeOfYou-EdSheeran-6443488.mp3?st=ycuZei2P_WKHl48bXVvUlA&e=1631635369",
-        title: "Shape Of You",
-        url: "https://www.nhaccuatui.com/bai-hat/shape-of-you-ed-sheeran.syMtBZwXwA76.html"
-    },
-    {
-        avatar: "https://avatar-ex-swe.nixcdn.com/song/2020/08/28/9/f/d/6/1598588186805.jpg",
-        bgImage: "https://avatar-ex-swe.nixcdn.com/singer/avatar/2020/06/29/0/9/e/a/1593414639316_600.jpg",
-        coverImage: "https://avatar-ex-swe.nixcdn.com/playlist/2021/05/26/b/e/2/9/1622014505032_500.jpg",
-        creator: "BlackPink, Selena Gomez",
-        lyric: "https://lrc-nct.nixcdn.com/2020/08/28/b/3/7/1/1598589793207.lrc",
-        music: "https://aredir.nixcdn.com/YG_Audio1/IceCreamWithSelenaGomez-BLACKPINK-6720101.mp3?st=gF7FNZ3dl9TEl1CGHZ8aUA&e=1631635369",
-        title: "Ice Cream",
-        url: "https://www.nhaccuatui.com/bai-hat/ice-cream-blackpink-ft-selena-gomez.NBhWAVSyHGyQ.html"
-    },
-    {
-        avatar: "https://avatar-ex-swe.nixcdn.com/song/2017/10/25/f/3/a/5/1508902512730.jpg",
-        bgImage: "https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/03/21/0/e/3/d/1553153837657_600.jpg",
-        coverImage: "https://avatar-ex-swe.nixcdn.com/playlist/2021/05/26/b/e/2/9/1622014505032_500.jpg",
-        creator: "Martin Garrix, Troye Sivan",
-        lyric: "https://lrc-nct.nixcdn.com/2018/02/06/a/d/e/1/1517893110265.lrc",
-        music: "https://aredir.nixcdn.com/Sony_Audio36/ThereForYou-MartinGarrixTroyeSivan-5001850.mp3?st=nkPQTE5teNyyMuqaqrBANA&e=1631635369",
-        title: "There For You",
-        url: "https://www.nhaccuatui.com/bai-hat/there-for-you-martin-garrix-ft-troye-sivan.mnSGeFl39YSp.html"
-    }
-]
 
 export default function PlayerScreen()
 {
+    const { trackList } = useSelector(state => state.player);
     /*
     isPlaying : đang phát nhạc hay không ?
     playbackInstance : đối tượng phát nhạc được tạo ra từ expo-av
@@ -150,7 +79,7 @@ export default function PlayerScreen()
             let playbackInstance = new Audio.Sound();
             // Url bài hát
             const source = {
-                uri: songs[currentIndex].music
+                uri: trackList[currentIndex].music
             };
             // Trạng thái phát nhạc
             const status = {
@@ -208,7 +137,7 @@ export default function PlayerScreen()
             await playbackInstance.unloadAsync();
             let currentIndex = player.currentIndex;
             if (currentIndex === 0)
-                currentIndex = songs.length - 1;
+                currentIndex = trackList.length - 1;
             else
                 currentIndex -= 1;
             setPlayer(player => ({
@@ -229,7 +158,7 @@ export default function PlayerScreen()
         {
             await playbackInstance.unloadAsync();
             let currentIndex = player.currentIndex;
-            if (currentIndex === songs.length - 1)
+            if (currentIndex === trackList.length - 1)
                 currentIndex = 0;
             else
                 currentIndex += 1;
@@ -271,17 +200,17 @@ export default function PlayerScreen()
         <View style={styles.container}>
             <View style={styles.artworkWrapper}>
                 <Image
-                    source={{ uri: songs[player.currentIndex].avatar }}
+                    source={{ uri: trackList[player.currentIndex].avatar }}
                     style={styles.artworkImage}
                 />
             </View>
 
             <View style={styles.inforBar}>
                 <Text style={styles.titleInfor}>
-                    {songs[player.currentIndex].title}
+                    {trackList[player.currentIndex].title}
                 </Text>
                 <Text style={styles.creatorInfor}>
-                    {songs[player.currentIndex].creator}
+                    {trackList[player.currentIndex].creator}
                 </Text>
             </View>
 
