@@ -97,6 +97,10 @@ export default function useMusic()
         dispatch(SET_CURRENT_TC(tc));
     };
 
+    const setCurrentSongs = (songs) =>
+    {
+        dispatch(SET_SONGS(songs));
+    }
     const filterSongTopCategory = async (top, category) =>
     {
         // Lọc ra các bài hát theo top và category
@@ -152,6 +156,6 @@ export default function useMusic()
     return {
         createMusicTable, dropMusicTable, getMusicAPI, getMusicDB, setCurrentTopCategory,
         filterSongTopCategory, searchSongTitle, clearSongStore,
-        deleteTopCategory, deleteSong, deleteAll, reloadMusic
+        deleteTopCategory, deleteSong, deleteAll, reloadMusic, setCurrentSongs
     };
 }
