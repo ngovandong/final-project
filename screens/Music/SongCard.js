@@ -1,13 +1,20 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { useFirebase } from "../../hooks/useFirebase";
+import { IconButton } from "react-native-paper";
+import useMusic from "../../hooks/useMusic";
 
-export default function SongCard({ song })
+export default function SongCard({ song, isFavor })
 {
-    const { addSong } = useFirebase();
-
+    const { addSongToFavorite, removeSongFromFavorite, getListFavorite } = useFirebase();
+    const { setCurrentSongs } = useMusic()
+    const handleDelete = (music) =>
+    {
+        removeSongFromFavorite(music)
+        getListFavorite().then((songs) => setCurrentSongs(songs))
+    }
     return (
-        <TouchableOpacity style={styles.songCard} activeOpacity={0.5} onLongPress={() => { addSong(song) }}>
+        <TouchableOpacity style={styles.songCard} activeOpacity={0.5} onLongPress={() => { addSongToFavorite(song) }}>
             <View style={styles.imgBox}>
                 <Image style={styles.avatarIMG} source={{ uri: song.avatar }} />
             </View>
@@ -16,6 +23,13 @@ export default function SongCard({ song })
                 <Text style={styles.songTitle}>{song.title}</Text>
                 <Text style={styles.songCreator}>{song.creator}</Text>
             </View>
+            {isFavor && <View style={styles.btnContainer}>
+                <IconButton
+                    icon="delete"
+                    size={20}
+                    onPress={() => handleDelete(song.music)}
+                />
+            </View>}
         </TouchableOpacity>
     );
 }
@@ -50,7 +64,7 @@ const styles = StyleSheet.create({
 
     inforBox: {
         flex: 4,
-        marginLeft: 15,
+        marginLeft: 30,
         alignSelf: "center"
     },
     songTitle: {
@@ -59,5 +73,9 @@ const styles = StyleSheet.create({
     songCreator: {
         fontSize: 15,
         color: "#959596"
+    },
+    btnContainer: {
+        flex: 1,
+        justifyContent: 'center'
     }
 });

@@ -17,13 +17,16 @@ export default function SongList({ navigation })
 
     const _dataProvider = new DataProvider((r1, r2) => r1 !== r2).cloneWithRows(songs);
 
+
     const _layoutProvider = new LayoutProvider(
         (index) => _dataProvider.getDataForIndex(index),
         (type, dim) => { dim.width = SCREEN_WIDTH; dim.height = 100; })
 
+    const isFavor = current_tc == "My favorite";
+
     const _rowRenderer = (type, data) =>
     {
-        return <SongCard song={data} />
+        return <SongCard isFavor={isFavor} song={data} />
     };
 
     const handleGoBack = () =>
@@ -32,6 +35,7 @@ export default function SongList({ navigation })
         clearSongStore();
         navigation.navigate("Music", { screen: "TopCategory" })
     };
+
 
     return (
         <View>
