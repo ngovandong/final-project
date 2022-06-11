@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "top100-nct",
+    "name": "Top 100 NCT",
     "slug": "top100-nct",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -14,22 +14,19 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "UIBackgroundModes": [
-          "audio"
-        ]
+        "UIBackgroundModes": ["audio"]
       }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.ngovandong.top100nct"
     },
     "web": {
       "favicon": "./assets/favicon.png"
