@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { getSongDuration } from "../../helpers/extension";
+import TrackListModal from "../../modals/TrackListModal";
 import Slider from '@react-native-community/slider';
 import React, { useState, useEffect } from "react";
 import usePlayer from "../../hooks/usePlayer";
@@ -11,6 +12,7 @@ export default function PlayerScreen()
 {
     const { trackList } = useSelector(state => state.player);
     const { shuffleTrackList } = usePlayer();
+    const [modalVisible, setModalVisible] = useState(false);
     /*
     isPlaying : đang phát nhạc hay không ?
     playbackInstance : đối tượng phát nhạc được tạo ra từ expo-av
@@ -203,6 +205,11 @@ export default function PlayerScreen()
         shuffleTrackList(player.currentIndex);
     };
 
+    const handleToggleModal = () =>
+    {
+        setModalVisible(modalVisible => !modalVisible);
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.artworkWrapper}>
@@ -244,7 +251,7 @@ export default function PlayerScreen()
             </View>
 
             <View style={styles.musicController}>
-                <TouchableOpacity onPress={handleShuffleTrack} activeOpacity={0.5}>
+                <TouchableOpacity onPress={handleShuffleTrack} activeOpacity={0.2}>
                     <Ionicons name="shuffle" size={25}
                         color="black" style={styles.shufflePlay} />
                 </TouchableOpacity>
@@ -264,11 +271,17 @@ export default function PlayerScreen()
                         color="black" style={styles.playBackForward} />
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => { }} activeOpacity={0.5}>
+                <TouchableOpacity onPress={handleToggleModal} activeOpacity={0.2}>
                     <Ionicons name="musical-notes" size={25}
                         color="black" style={styles.trackQueue} />
                 </TouchableOpacity>
             </View>
+
+            <TrackListModal
+                trackList={trackList}
+                visible={modalVisible}
+                hideDialog={handleToggleModal}
+            />
         </View>
     );
 }
