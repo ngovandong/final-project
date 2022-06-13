@@ -202,12 +202,33 @@ export default function PlayerScreen()
 
     const handleShuffleTrack = () =>
     {
+        // Hàm xáo ngẫu nhiên danh sách phát, trừ vị trí của bài hiện tại
         shuffleTrackList(player.currentIndex);
     };
 
     const handleToggleModal = () =>
     {
+        // Hàm bật/tắt Modal/Dialog
         setModalVisible(modalVisible => !modalVisible);
+    };
+
+    const handleChangeCurrentTrack = async (music) =>
+    {
+        // Hàm thay đổi bài hát muốn phát
+        // Hàm chuyển đến bài tiếp theo, nếu đang là bài cuối thì chuyển về bài đầu tiên
+        let { playbackInstance } = player;
+        if (playbackInstance)
+        {
+            const index = trackList.findIndex(c => c.music === music);
+            await playbackInstance.unloadAsync();
+            setPlayer(player => ({
+                ...player,
+                currentIndex: index
+            }));
+            // Do state chưa kịp update currentIndex mới nên hàm loadAudio
+            // cần tự truyền vào currentIndex chứ không thể tự lấy ra từ state
+            loadAudio(index);
+        }
     };
 
     return (
@@ -280,7 +301,8 @@ export default function PlayerScreen()
             <TrackListModal
                 trackList={trackList}
                 visible={modalVisible}
-                hideDialog={handleToggleModal}
+                onHideDialog={handleToggleModal}
+                onChageTrack={handleChangeCurrentTrack}
             />
         </View>
     );

@@ -6,7 +6,7 @@ import React from "react";
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-function TrackListModal({ trackList, visible, hideDialog })
+function TrackListModal({ trackList, visible, onHideDialog, onChageTrack })
 {
     const _dataProvider = new DataProvider((r1, r2) => r1 !== r2).cloneWithRows(trackList);
 
@@ -17,7 +17,7 @@ function TrackListModal({ trackList, visible, hideDialog })
     const _rowRenderer = (type, data) =>
     {
         return <TouchableOpacity style={styles.songCard} activeOpacity={0.5}
-            onPress={() => { }}>
+            onPress={() => onChageTrack(data.music)}>
             <View style={styles.imgBox}>
                 <Image style={styles.avatarIMG} source={{ uri: data.avatar }} />
             </View>
@@ -30,7 +30,7 @@ function TrackListModal({ trackList, visible, hideDialog })
 
     return (
         <Portal>
-            <Dialog visible={visible} onDismiss={hideDialog}
+            <Dialog visible={visible} onDismiss={onHideDialog}
                 style={styles.trackListDialog}>
                 <Dialog.Title>
                     <Text>Track List</Text>
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
         alignSelf: "center"
     },
     songTitle: {
-        fontSize: 18
+        fontSize: 16
     },
     songCreator: {
         fontSize: 12,
