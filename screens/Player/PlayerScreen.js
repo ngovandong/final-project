@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { getSongDuration } from "../../helpers/extension";
+import TrackListModal from "../../modals/TrackListModal";
 import Slider from '@react-native-community/slider';
 import React, { useState, useEffect } from "react";
 import usePlayer from "../../hooks/usePlayer";
@@ -11,6 +12,7 @@ export default function PlayerScreen()
 {
     const { trackList } = useSelector(state => state.player);
     const { shuffleTrackList } = usePlayer();
+    const [modalVisible, setModalVisible] = useState(false);
     /*
     isPlaying : đang phát nhạc hay không ?
     playbackInstance : đối tượng phát nhạc được tạo ra từ expo-av
@@ -200,7 +202,33 @@ export default function PlayerScreen()
 
     const handleShuffleTrack = () =>
     {
+        // Hàm xáo ngẫu nhiên danh sách phát, trừ vị trí của bài hiện tại
         shuffleTrackList(player.currentIndex);
+    };
+
+    const handleToggleModal = () =>
+    {
+        // Hàm bật/tắt Modal/Dialog
+        setModalVisible(modalVisible => !modalVisible);
+    };
+
+    const handleChangeCurrentTrack = async (music) =>
+    {
+        // Hàm thay đổi bài hát muốn phát
+        // Hàm chuyển đến bài tiếp theo, nếu đang là bài cuối thì chuyển về bài đầu tiên
+        let { playbackInstance } = player;
+        if (playbackInstance)
+        {
+            const index = trackList.findIndex(c => c.music === music);
+            await playbackInstance.unloadAsync();
+            setPlayer(player => ({
+                ...player,
+                currentIndex: index
+            }));
+            // Do state chưa kịp update currentIndex mới nên hàm loadAudio
+            // cần tự truyền vào currentIndex chứ không thể tự lấy ra từ state
+            loadAudio(index);
+        }
     };
 
     return (
@@ -244,7 +272,7 @@ export default function PlayerScreen()
             </View>
 
             <View style={styles.musicController}>
-                <TouchableOpacity onPress={handleShuffleTrack} activeOpacity={0.5}>
+                <TouchableOpacity onPress={handleShuffleTrack} activeOpacity={0.2}>
                     <Ionicons name="shuffle" size={25}
                         color="black" style={styles.shufflePlay} />
                 </TouchableOpacity>
@@ -264,11 +292,18 @@ export default function PlayerScreen()
                         color="black" style={styles.playBackForward} />
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => { }} activeOpacity={0.5}>
+                <TouchableOpacity onPress={handleToggleModal} activeOpacity={0.2}>
                     <Ionicons name="musical-notes" size={25}
                         color="black" style={styles.trackQueue} />
                 </TouchableOpacity>
             </View>
+
+            <TrackListModal
+                trackList={trackList}
+                visible={modalVisible}
+                onHideDialog={handleToggleModal}
+                onChageTrack={handleChangeCurrentTrack}
+            />
         </View>
     );
 }
