@@ -1,4 +1,4 @@
-import { SET_TRACK_LIST, ADD_TRACK, REMOVE_TRACK } from "../redux/slices/playerSlice"
+import { SET_TRACK_LIST, ADD_TRACK, REMOVE_TRACK, SHUFFLE_TRACK } from "../redux/slices/playerSlice"
 import { useDispatch } from 'react-redux';
 
 export default function useMusic()
@@ -18,10 +18,16 @@ export default function useMusic()
 
     const removeTrackFromPlayer = (track) =>
     {
-        dispatch(REMOVE_TRACK(track))
+        dispatch(REMOVE_TRACK(track));
+    };
+
+    const shuffleTrackList = () =>
+    {
+        dispatch(SHUFFLE_TRACK());
     };
 
     return {
-        getTrackListFromDB, addTrackToPlayer, removeTrackFromPlayer
+        getTrackListFromDB, addTrackToPlayer,
+        removeTrackFromPlayer, shuffleTrackList
     };
 }

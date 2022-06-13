@@ -3,12 +3,14 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { getSongDuration } from "../../helpers/extension";
 import Slider from '@react-native-community/slider';
 import React, { useState, useEffect } from "react";
+import usePlayer from "../../hooks/usePlayer";
 import { useSelector } from "react-redux";
 import { Audio } from 'expo-av';
 
 export default function PlayerScreen()
 {
     const { trackList } = useSelector(state => state.player);
+    const { shuffleTrackList } = usePlayer();
     /*
     isPlaying : đang phát nhạc hay không ?
     playbackInstance : đối tượng phát nhạc được tạo ra từ expo-av
@@ -237,6 +239,11 @@ export default function PlayerScreen()
             </View>
 
             <View style={styles.musicController}>
+                <TouchableOpacity onPress={shuffleTrackList} activeOpacity={0.5}>
+                    <Ionicons name="shuffle" size={25}
+                        color="black" style={styles.shufflePlay} />
+                </TouchableOpacity>
+
                 <TouchableOpacity onPress={handlePreviousPlay} activeOpacity={0.5}>
                     <Ionicons name="play-skip-back-outline" size={45}
                         color="black" style={styles.playBackForward} />
@@ -250,6 +257,11 @@ export default function PlayerScreen()
                 <TouchableOpacity onPress={handleNextPlay} activeOpacity={0.5}>
                     <Ionicons name="play-skip-forward-outline" size={45}
                         color="black" style={styles.playBackForward} />
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => { }} activeOpacity={0.5}>
+                    <Ionicons name="musical-notes" size={25}
+                        color="black" style={styles.trackQueue} />
                 </TouchableOpacity>
             </View>
         </View>
@@ -286,7 +298,8 @@ const styles = StyleSheet.create({
     },
     /*-------INFOR------*/
     inforBar: {
-        marginTop: 10
+        marginTop: 10,
+        width: "85%"
     },
     titleInfor: {
         fontSize: 20,
@@ -319,11 +332,17 @@ const styles = StyleSheet.create({
     /*-------CONTROLLER------*/
     musicController: {
         flexDirection: "row",
-        width: "60%",
+        width: "75%",
         justifyContent: "space-between",
         marginTop: 15
     },
     playBackForward: {
         marginTop: 20
+    },
+    shufflePlay: {
+        marginTop: 30
+    },
+    trackQueue: {
+        marginTop: 30
     }
 });

@@ -22,7 +22,21 @@ export const playerSlice = createSlice({
         },
         ADD_TRACK: (state, action) =>
         {
-            state.trackList.push(action.payload);
+            // Kiểm tra bài này đã có trong TrackList chưa
+            let found = false;
+            for (let i = 0; i < state.trackList.length; i++)
+            {
+                if (state.trackList[i].music === action.payload.music)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            // Nếu bài này chưa có thì mới thêm vào cuối mảng
+            if (!found)
+            {
+                state.trackList.push(action.payload);
+            }
             return state;
         },
         REMOVE_TRACK: (state, action) =>
@@ -34,11 +48,27 @@ export const playerSlice = createSlice({
                 state.trackList = state.trackList.filter(t => t.music !== music);
             };
             return state;
+        },
+        SHUFFLE_TRACK: (state, action) =>
+        {
+            let { trackList } = state;
+            console.log("Before : ", trackList.map(c => c.title));
+            for (let i = trackList.length - 1; i > 0; i--)
+            {
+                const j = Math.floor(Math.random() * (i + 1));
+                const temp = trackList[i];
+                trackList[i] = trackList[j];
+                trackList[j] = temp;
+            }
+            console.log("After : ", trackList.map(c => c.title));
+            state.trackList = trackList;
+            return state;
         }
     },
     extraReducers: {}
 });
 
-export const { SET_TRACK_LIST, ADD_TRACK, REMOVE_TRACK } = playerSlice.actions;
+export const { SET_TRACK_LIST, ADD_TRACK,
+    REMOVE_TRACK, SHUFFLE_TRACK } = playerSlice.actions;
 
 export default playerSlice.reducer;
