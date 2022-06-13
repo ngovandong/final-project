@@ -21,9 +21,9 @@ export default function useMusic()
         dispatch(REMOVE_TRACK(track));
     };
 
-    const shuffleTrackList = () =>
+    const shuffleTrackList = (currentIndex) =>
     {
-        dispatch(SHUFFLE_TRACK());
+        dispatch(SHUFFLE_TRACK(currentIndex));
     };
 
     return {

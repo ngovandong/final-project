@@ -198,6 +198,11 @@ export default function PlayerScreen()
         return 0;
     };
 
+    const handleShuffleTrack = () =>
+    {
+        shuffleTrackList(player.currentIndex);
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.artworkWrapper}>
@@ -239,7 +244,7 @@ export default function PlayerScreen()
             </View>
 
             <View style={styles.musicController}>
-                <TouchableOpacity onPress={shuffleTrackList} activeOpacity={0.5}>
+                <TouchableOpacity onPress={handleShuffleTrack} activeOpacity={0.5}>
                     <Ionicons name="shuffle" size={25}
                         color="black" style={styles.shufflePlay} />
                 </TouchableOpacity>

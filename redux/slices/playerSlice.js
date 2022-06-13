@@ -52,16 +52,24 @@ export const playerSlice = createSlice({
         SHUFFLE_TRACK: (state, action) =>
         {
             let { trackList } = state;
-            console.log("Before : ", trackList.map(c => c.title));
-            for (let i = trackList.length - 1; i > 0; i--)
+            if (trackList.length > 1)
             {
-                const j = Math.floor(Math.random() * (i + 1));
-                const temp = trackList[i];
-                trackList[i] = trackList[j];
-                trackList[j] = temp;
+                // Giữ lại bài hát hiện tại, suffle các bài hát khác
+                const currentIndex = action.payload;
+                // Lấy bài hiện tại và xóa nó khỏi trackList
+                const currentTrack = trackList.splice(currentIndex, 1)[0];
+                // Xáo ngẫu nhiên các bài hát khác
+                for (let i = trackList.length - 1; i > 0; i--)
+                {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    const temp = trackList[i];
+                    trackList[i] = trackList[j];
+                    trackList[j] = temp;
+                }
+                // Thêm lại currentTrack vào lại đúng index ban đầu của nó
+                trackList.splice(currentIndex, 0, currentTrack);
+                state.trackList = trackList;
             }
-            console.log("After : ", trackList.map(c => c.title));
-            state.trackList = trackList;
             return state;
         }
     },
