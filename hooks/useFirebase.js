@@ -21,7 +21,7 @@ import
 } from "firebase/firestore";
 import { useDispatch } from "react-redux";
 import { OPEN_ERROR_MODAL, OPEN_SUCCESS_MODAL, SET_ERROR_TEXT, SET_SUCCESS_TEXT } from "../redux/slices/modalSlice";
-
+import useMusic from './useMusic'
 const FirebaseContext = React.createContext();
 
 export function useFirebase() 
@@ -34,21 +34,20 @@ export function FirebaseProvider({ children })
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
   const db = getFirestore();
+  const { setCurrentSongs } = useMusic()
 
   const dispatch = useDispatch();
 
   async function signup(email, password) 
   {
-    try
-    {
+    try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user
       await setDoc(doc(db, "users", user.uid), {
         favorite: [],
         playlists: []
       });
-    } catch (error)
-    {
+    } catch (error) {
       //log error
       dispatch(SET_ERROR_TEXT("Fail to signup!"));
       // open error dialog
@@ -57,22 +56,18 @@ export function FirebaseProvider({ children })
   }
   async function login(email, password)
   {
-    try
-    {
+    try {
       await signInWithEmailAndPassword(auth, email, password);
-    } catch (error)
-    {
+    } catch (error) {
       dispatch(SET_ERROR_TEXT("Wrong username or password!"));
       dispatch(OPEN_ERROR_MODAL());
     }
   }
   function logout()
   {
-    try
-    {
+    try {
       return signOut(auth);
-    } catch (error)
-    {
+    } catch (error) {
       console.log(error);
     }
   }
@@ -81,8 +76,7 @@ export function FirebaseProvider({ children })
 
   async function addSongToFavorite(song)
   {
-    try
-    {
+    try {
       if (!currentUser)
         throw Error("Please login!")
       const docRef = doc(db, "users", currentUser.uid);
@@ -90,8 +84,7 @@ export function FirebaseProvider({ children })
 
       const favorite = docSnap.data().favorite
 
-      if (!favorite.some((s) => s.music == song.music))
-      {
+      if (!favorite.some((s) => s.music == song.music)) {
         favorite.push(song)
         await updateDoc(docRef, {
           favorite: favorite
@@ -100,12 +93,10 @@ export function FirebaseProvider({ children })
         dispatch(SET_SUCCESS_TEXT("Song is added to favorite!"));
         // open error dialog
         dispatch(OPEN_SUCCESS_MODAL());
-      } else
-      {
+      } else {
         throw Error("Song already exists!")
       }
-    } catch (error)
-    {
+    } catch (error) {
       dispatch(SET_ERROR_TEXT(error.toString()));
       // open error dialog
       dispatch(OPEN_ERROR_MODAL());
@@ -114,8 +105,7 @@ export function FirebaseProvider({ children })
 
   async function removeSongFromFavorite(music)
   {
-    try
-    {
+    try {
       if (!currentUser)
         throw Error("Please login!")
       const docRef = doc(db, "users", currentUser.uid);
@@ -126,12 +116,12 @@ export function FirebaseProvider({ children })
       await updateDoc(docRef, {
         favorite: newFavorite
       });
+      getListFavorite().then((songs) => setCurrentSongs(songs))
 
       dispatch(SET_SUCCESS_TEXT("Song is removed to favorite!"));
       // open error dialog
       dispatch(OPEN_SUCCESS_MODAL());
-    } catch (error)
-    {
+    } catch (error) {
       dispatch(SET_ERROR_TEXT(error.toString()));
       // open error dialog
       dispatch(OPEN_ERROR_MODAL());

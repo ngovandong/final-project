@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
-import modalSlice from './slices/modalSlice';
+import playerSlice from "./slices/playerSlice";
+import modalSlice from "./slices/modalSlice";
 import musicSlice from "./slices/musicSlice";
 
 export const store = configureStore({
     reducer: {
         music: musicSlice,
-        modal: modalSlice
+        modal: modalSlice,
+        player: playerSlice
     },
 
     // Disable SerializableStateInvariantMiddleware
