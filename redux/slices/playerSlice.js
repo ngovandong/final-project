@@ -3,11 +3,15 @@ import { createSlice } from '@reduxjs/toolkit';
 const init = {
     trackList: [
         {
-            avatar: "https://avatar-ex-swe.nixcdn.com/song/2018/01/25/5/2/d/e/1516891769034.jpg",
-            creator: "Ed Sheeran",
-            music: "https://aredir.nixcdn.com/Warner_Audio38/ShapeOfYou-EdSheeran-6443488.mp3?st=ycuZei2P_WKHl48bXVvUlA&e=1631635369",
-            title: "Shape Of You",
-        },
+            avatar: "https://avatar-ex-swe.nixcdn.com/song/2021/09/09/f/c/f/d/1631181753902.jpg",
+            bgImage: "https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/10/29/a/a/d/4/1572318457703_600.jpg",
+            coverImage: "https://avatar-ex-swe.nixcdn.com/playlist/2021/05/04/3/b/6/d/1620100988545_500.jpg",
+            creator: "Masew, Masiu, B Ray, TAP",
+            lyric: "https://lrc-nct.nixcdn.com/null",
+            music: "https://aredir.nixcdn.com/NhacCuaTui1021/CuoiThoi-MasewMasiuBRayTAPVietNam-7085648.mp3?st=Fdf-94PGaMjuqak7C3FJzw&e=1631635351",
+            title: "Cưới Thôi",
+            url: "https://www.nhaccuatui.com/bai-hat/cuoi-thoi-masew-ft-masiu-ft-b-ray-ft-tap.SQTZSysfmPRJ.html"
+        }
     ]
 }
 
