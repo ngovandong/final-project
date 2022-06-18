@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { getSongDuration } from "../../helpers/extension";
 import TrackListModal from "../../modals/TrackListModal";
 import Slider from '@react-native-community/slider';
-import React, { useState, useEffect } from "react";
 import usePlayer from "../../hooks/usePlayer";
 import { useSelector } from "react-redux";
 import { Audio } from 'expo-av';
@@ -206,13 +206,13 @@ export default function PlayerScreen()
         shuffleTrackList(player.currentIndex);
     };
 
-    const handleToggleModal = () =>
+    const handleToggleModal = useCallback(() =>
     {
         // Hàm bật/tắt Modal/Dialog
         setModalVisible(modalVisible => !modalVisible);
-    };
+    }, []);
 
-    const handleChangeCurrentTrack = async (music) =>
+    const handleChangeCurrentTrack = useCallback(async (music) =>
     {
         // Hàm thay đổi bài hát muốn phát
         // Hàm chuyển đến bài tiếp theo, nếu đang là bài cuối thì chuyển về bài đầu tiên
@@ -229,7 +229,7 @@ export default function PlayerScreen()
             // cần tự truyền vào currentIndex chứ không thể tự lấy ra từ state
             loadAudio(index);
         }
-    };
+    }, [trackList, player.playbackInstance, player.currentIndex]);
 
     return (
         <View style={styles.container}>
