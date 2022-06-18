@@ -1,17 +1,19 @@
 import { SET_TRACK_LIST, ADD_TRACK, REMOVE_TRACK, SHUFFLE_TRACK } from "../redux/slices/playerSlice"
-import { useDispatch } from 'react-redux';
+import { storeTrackList, restoreTrackList } from "../helpers/asyncStorage";
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function useMusic()
 {
+    // const { trackList } = useSelector(state => state.player);
     const dispatch = useDispatch();
 
-    const getTrackListFromDB = async () =>
+    const getRestoredTrackList = async () =>
     {
-        const trackList = [];
-        dispatch(SET_TRACK_LIST(trackList));
+        const trackList = await restoreTrackList();
+        if (trackList) dispatch(SET_TRACK_LIST(trackList));
     };
 
-    const addTrackToPlayer = (track) =>
+    const addTrackToPlayer = async (track) =>
     {
         dispatch(ADD_TRACK(track));
     };
@@ -27,7 +29,7 @@ export default function useMusic()
     };
 
     return {
-        getTrackListFromDB, addTrackToPlayer,
+        getRestoredTrackList, addTrackToPlayer,
         removeTrackFromPlayer, shuffleTrackList
     };
 }
