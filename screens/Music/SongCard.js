@@ -4,7 +4,7 @@ import { IconButton } from "react-native-paper";
 import useMusic from "../../hooks/useMusic";
 import usePlayer from "../../hooks/usePlayer";
 
-export default function SongCard({ song, isFavor })
+export default function SongCard({ song, isFavor, showSnackbar })
 {
     const { addSongToFavorite, removeSongFromFavorite, getListFavorite } = useFirebase();
     const handleDelete = (music) =>
@@ -15,7 +15,11 @@ export default function SongCard({ song, isFavor })
 
     return (
         <TouchableOpacity style={styles.songCard} activeOpacity={0.5}
-            onPress={() => addTrackToPlayer(song)}
+            onPress={() =>
+            {
+                addTrackToPlayer(song)
+                showSnackbar()
+            }}
             onLongPress={() => { addSongToFavorite(song) }}>
             <View style={styles.imgBox}>
                 <Image style={styles.avatarIMG} source={{ uri: song.avatar }} />
