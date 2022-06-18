@@ -1,10 +1,9 @@
 import { SET_TRACK_LIST, ADD_TRACK, REMOVE_TRACK, SHUFFLE_TRACK } from "../redux/slices/playerSlice"
-import { storeTrackList, restoreTrackList } from "../helpers/asyncStorage";
-import { useDispatch, useSelector } from 'react-redux';
+import { restoreTrackList } from "../helpers/asyncStorage";
+import { useDispatch } from 'react-redux';
 
 export default function useMusic()
 {
-    // const { trackList } = useSelector(state => state.player);
     const dispatch = useDispatch();
 
     const getRestoredTrackList = async () =>

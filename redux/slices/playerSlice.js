@@ -1,3 +1,4 @@
+import { storeTrackList } from "../../helpers/asyncStorage";
 import { createSlice } from '@reduxjs/toolkit';
 
 const init = {
@@ -41,6 +42,7 @@ export const playerSlice = createSlice({
             {
                 state.trackList.push(action.payload);
             }
+            storeTrackList(state.trackList);
             return state;
         },
         REMOVE_TRACK: (state, action) =>
@@ -50,6 +52,7 @@ export const playerSlice = createSlice({
             {
                 const { music } = action.payload;
                 state.trackList = state.trackList.filter(t => t.music !== music);
+                storeTrackList(state.trackList);
             };
             return state;
         },
@@ -73,6 +76,7 @@ export const playerSlice = createSlice({
                 // Thêm lại currentTrack vào lại đúng index ban đầu của nó
                 trackList.splice(currentIndex, 0, currentTrack);
                 state.trackList = trackList;
+                storeTrackList(state.trackList);
             }
             return state;
         }
