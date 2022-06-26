@@ -8,6 +8,17 @@
 - Trương Minh Phước - 102190283 - 19Nh11
 - Ngô Văn Đông - 102190107 - 19Nh15
 
+## Demo
+
+<div align="center" >
+  <br/>
+  <br/>
+  <img src="https://github.com/ngovandong/final-project/image/music.png" height="500" width="auto" />
+  <img src="https://github.com/ngovandong/final-project/image/player.png" height="500" width="auto" />
+  <img src="https://github.com/ngovandong/final-project/image/you.png" height="500" width="auto" />
+  <br/>
+  <br/>
+</div>
 ## Phân công nhiệm vụ
 - Phước : trang Music và trang Player (API, SQLite3)
 - Đông : trang You (Firebase)
