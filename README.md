@@ -4,11 +4,15 @@
 *[Source](https://github.com/ngovandong/final-project)*
 
 ![N|Solid](https://nordiccoder.com/app/uploads/2018/10/react-native.png)
-## Members
+## Thành viên thực hiện
 - Trương Minh Phước - 102190283 - 19Nh11
 - Ngô Văn Đông - 102190107 - 19Nh15
 
-## Features
+## Phân công nhiệm vụ
+- Phước : trang Music và trang Player (API, SQLite3)
+- Đông : trang You (Firebase)
+
+## Chức năng
 
 - Đăng ký, đăng nhập, đăng xuất
 - Xem top 100 bài hát theo từng thể loại
@@ -19,9 +23,9 @@
 
 
 
-## Tech
+## Công nghệ
 
-Music app - top 100 NCT sử dung khá nhiều công nghệ:
+Music app - top 100 NCT sử dụng khá nhiều công nghệ:
 
 - [React Native](https://reactnative.dev/) 
 - [Expo](https://expo.dev/)
@@ -33,8 +37,8 @@ Music app - top 100 NCT sử dung khá nhiều công nghệ:
 
 Ngoài các công nghệ đã liệt kê thì còn nhiều thư viện bổ sung.
 
-## Installation
-### Run local
+## Hướng dẫn cài đặt
+### Chạy local bằng Expo CLI
 1. Cài NodeJS và NPM
 2. Cài Expo CLI : 
     ```sh
@@ -58,7 +62,7 @@ Ngoài các công nghệ đã liệt kê thì còn nhiều thư viện bổ sung
         expo build:ios 
     ```
 
-### Run via Expo Host
+### Chạy online thông qua Expo Host
 1. Tải Expo go trong Apple Store [tại đây](https://apps.apple.com/vn/app/expo-go/id982107779?l=vi) hoặc CH Play [tại đây](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=en&gl=US) 
 2. Bật Expo go và quét mã QR
 ![Expo QR](https://qr.expo.dev/expo-go?owner=ngovandong&slug=top100-nct&releaseChannel=default&host=exp.host)
