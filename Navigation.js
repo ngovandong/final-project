@@ -1,6 +1,8 @@
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { NavigationContainer } from "@react-navigation/native";
+import usePlayer from "./hooks/usePlayer";
+import React, { useEffect } from "react";
 
 import ProfileScreen from "./screens/Profile/ProfileScreen";
 import PlayerScreen from "./screens/Player/PlayerScreen";
@@ -10,6 +12,15 @@ const Tab = createMaterialBottomTabNavigator();
 
 export default function Navigation()
 {
+  const { getRestoredTrackList } = usePlayer();
+
+  useEffect(() =>
+  {
+    const restorePlayer = async () => getRestoredTrackList();
+    restorePlayer();
+  }, []);
+
+
   return (
     <NavigationContainer>
       <Tab.Navigator

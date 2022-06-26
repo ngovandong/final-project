@@ -1,16 +1,20 @@
 import { RecyclerListView, DataProvider, LayoutProvider } from 'recyclerlistview';
 import { StyleSheet, View, Dimensions } from "react-native";
-import { Appbar } from 'react-native-paper';
+import { Appbar, Snackbar } from 'react-native-paper';
 import useMusic from "../../hooks/useMusic";
 import { useSelector } from "react-redux";
 import SongCard from "./SongCard";
-import React from "react";
+import React, { useState } from "react";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 export default function SongList({ navigation })
 {
+    const [isShowSnackbar, setshowSnackbar] = useState(false);
+    const showSnackbar = () => setshowSnackbar(true)
+    const onDismissSnackBar = () => setshowSnackbar(false);
+
     const { songs, current_tc } = useSelector(state => state.music);
 
     const { clearSongStore } = useMusic();
@@ -26,14 +30,20 @@ export default function SongList({ navigation })
 
     const _rowRenderer = (type, data) =>
     {
-        return <SongCard isFavor={isFavor} song={data} />
+        return <SongCard showSnackbar={showSnackbar} isFavor={isFavor} song={data} />
     };
 
     const handleGoBack = () =>
     {
         // Clear song ở Redux Store trước khi go back
         clearSongStore();
-        navigation.navigate("Music", { screen: "TopCategory" })
+
+        if (isFavor) {
+            navigation.navigate("Music", { screen: "TopCategory" })
+            navigation.navigate("Profile")
+        } else {
+            navigation.navigate("Music", { screen: "TopCategory" })
+        }
     };
 
 
@@ -53,6 +63,19 @@ export default function SongList({ navigation })
                     layoutProvider={_layoutProvider}
                 />
             }
+            <Snackbar
+                duration={1000}
+                visible={isShowSnackbar}
+                onDismiss={onDismissSnackBar}
+                action={{
+                    label: 'Undo',
+                    onPress: () =>
+                    {
+                        // Do something
+                    },
+                }}>
+                Added to play queue
+            </Snackbar>
         </View>
     );
 }

@@ -1,6 +1,7 @@
 import { StyleSheet, Dimensions, TouchableOpacity, View, Image, Text } from "react-native";
 import { RecyclerListView, DataProvider, LayoutProvider } from 'recyclerlistview';
-import { Dialog, Portal } from "react-native-paper";
+import { Dialog, Portal, IconButton } from "react-native-paper";
+import usePlayer from "../hooks/usePlayer";
 import React from "react";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -8,6 +9,8 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 function TrackListModal({ trackList, visible, onHideDialog, onChageTrack })
 {
+    const { removeTrackFromPlayer } = usePlayer();
+
     const _dataProvider = new DataProvider((r1, r2) => r1 !== r2).cloneWithRows(trackList);
 
     const _layoutProvider = new LayoutProvider(
@@ -24,6 +27,13 @@ function TrackListModal({ trackList, visible, onHideDialog, onChageTrack })
             <View style={styles.inforBox}>
                 <Text style={styles.songTitle}>{data.title}</Text>
                 <Text style={styles.songCreator}>{data.creator}</Text>
+            </View>
+            <View style={styles.removeButton}>
+                <IconButton
+                    icon="close-circle-outline"
+                    size={22}
+                    onPress={() => removeTrackFromPlayer(data)}
+                />
             </View>
         </TouchableOpacity>
     };
