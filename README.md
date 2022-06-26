@@ -19,6 +19,7 @@
   <br/>
   <br/>
 </div>
+
 ## Phân công nhiệm vụ
 - Phước : trang Music và trang Player (API, SQLite3)
 - Đông : trang You (Firebase)
